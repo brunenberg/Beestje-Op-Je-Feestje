@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeestjeLibrary.Migrations
 {
     [DbContext(typeof(BOJFContext))]
-    [Migration("20240117150426_init")]
-    partial class init
+    [Migration("20240326125317_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,10 +33,6 @@ namespace BeestjeLibrary.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AnimalType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("BookingId")
                         .HasColumnType("int");
 
@@ -53,31 +49,17 @@ namespace BeestjeLibrary.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BookingId");
 
+                    b.HasIndex("Type");
+
                     b.ToTable("Animals");
-                });
-
-            modelBuilder.Entity("BeestjeLibrary.Enums.AnimalTypes", b =>
-                {
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Type");
-
-                    b.ToTable("AnimalType");
-                });
-
-            modelBuilder.Entity("BeestjeLibrary.Enums.CustomerCard", b =>
-                {
-                    b.Property<string>("CardType")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CardType");
-
-                    b.ToTable("CustomerCards");
                 });
 
             modelBuilder.Entity("BeestjeLibrary.Models.Account", b =>
@@ -92,20 +74,38 @@ namespace BeestjeLibrary.Migrations
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
 
-                    b.Property<int>("AdressId")
-                        .HasColumnType("int");
+                    b.Property<string>("CustomerCardId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CustomerCard")
+                    b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AdressId")
+                    b.HasIndex("AddressId")
                         .IsUnique();
+
+                    b.HasIndex("CustomerCardId");
+
+                    b.HasIndex("RoleName");
 
                     b.ToTable("Accounts");
                 });
@@ -140,7 +140,17 @@ namespace BeestjeLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Address");
+                    b.ToTable("Addresses");
+                });
+
+            modelBuilder.Entity("BeestjeLibrary.Models.AnimalType", b =>
+                {
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Type");
+
+                    b.ToTable("AnimalTypes");
                 });
 
             modelBuilder.Entity("BeestjeLibrary.Models.ApplicationUser", b =>
@@ -233,6 +243,26 @@ namespace BeestjeLibrary.Migrations
                     b.HasIndex("AccountId");
 
                     b.ToTable("Bookings");
+                });
+
+            modelBuilder.Entity("BeestjeLibrary.Models.CustomerCard", b =>
+                {
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Type");
+
+                    b.ToTable("CustomerCards");
+                });
+
+            modelBuilder.Entity("BeestjeLibrary.Models.Role", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -373,17 +403,41 @@ namespace BeestjeLibrary.Migrations
                     b.HasOne("BeestjeLibrary.Models.Booking", null)
                         .WithMany("Animals")
                         .HasForeignKey("BookingId");
+
+                    b.HasOne("BeestjeLibrary.Models.AnimalType", "AnimalType")
+                        .WithMany()
+                        .HasForeignKey("Type")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AnimalType");
                 });
 
             modelBuilder.Entity("BeestjeLibrary.Models.Account", b =>
                 {
                     b.HasOne("BeestjeLibrary.Models.Address", "Address")
                         .WithOne()
-                        .HasForeignKey("BeestjeLibrary.Models.Account", "AdressId")
+                        .HasForeignKey("BeestjeLibrary.Models.Account", "AddressId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("BeestjeLibrary.Models.CustomerCard", "CustomerCard")
+                        .WithMany()
+                        .HasForeignKey("CustomerCardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BeestjeLibrary.Models.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Address");
+
+                    b.Navigation("CustomerCard");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("BeestjeLibrary.Models.ApplicationUser", b =>
