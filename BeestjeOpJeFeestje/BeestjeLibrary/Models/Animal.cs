@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BeestjeLibrary.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using BeestjeLibrary.Enums;
 
 public class Animal {
     [Key]
@@ -16,6 +16,7 @@ public class Animal {
 
     [ForeignKey("AnimalType")]
     [Required(ErrorMessage = "Type is verplicht.")]
-    public required string AnimalType { get; set; }
+    public string Type { get; set; }
 
+    public virtual AnimalType AnimalType { get; set; }
 }

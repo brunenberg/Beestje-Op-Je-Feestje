@@ -1,21 +1,17 @@
-﻿using BeestjeLibrary.Enums;
-using BeestjeLibrary.Models;
+﻿using BeestjeLibrary.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using BeestjeLibrary.Enums;
 
-namespace BeestjeLibrary.DataAccess
-{
+namespace BeestjeLibrary.DataAccess {
 
     public class BOJFContext : IdentityDbContext<ApplicationUser, IdentityRole, string> {
         public BOJFContext() { }
         public BOJFContext(DbContextOptions<BOJFContext> options) : base(options) { }
         public virtual DbSet<Account> Accounts { get; set; }
-        public virtual DbSet<Address> Address { get; set; }
+        public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<Animal> Animals { get; set; }
-        public virtual DbSet<AnimalTypes> AnimalType { get; set; }
+        public virtual DbSet<AnimalType> AnimalTypes { get; set; }
         public virtual DbSet<Booking> Bookings { get; set; }
         public virtual DbSet<CustomerCard> CustomerCards { get; set; }
 
@@ -31,7 +27,7 @@ namespace BeestjeLibrary.DataAccess
             modelBuilder.Entity<Account>()
                 .HasOne(a => a.Address)
                 .WithOne()
-                .HasForeignKey<Account>(a => a.AdressId)
+                .HasForeignKey<Account>(a => a.AddressId)
                 .OnDelete(DeleteBehavior.Restrict); // Of een ander gewenst gedrag bij het verwijderen
 
             // Optioneel: Als je een relatie tussen ApplicationUser en Account wilt definiëren, kun je dit ook toevoegen
