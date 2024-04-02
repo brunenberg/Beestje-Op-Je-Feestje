@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Models;
+
 namespace BeestjeOpJeFeestje {
     public class Program {
         public static void Main(string[] args) {
@@ -5,6 +8,10 @@ namespace BeestjeOpJeFeestje {
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Add ApplicationDbContext to the DI container
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 
@@ -27,6 +34,7 @@ namespace BeestjeOpJeFeestje {
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
+
         }
     }
 }
