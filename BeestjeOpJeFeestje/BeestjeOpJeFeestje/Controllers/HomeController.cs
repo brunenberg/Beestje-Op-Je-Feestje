@@ -1,4 +1,4 @@
-﻿using BeestjeOpJeFeestje.Models;
+using BeestjeOpJeFeestje.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -11,6 +11,10 @@ namespace BeestjeOpJeFeestje.Controllers {
         }
 
         public IActionResult Index() {
+            return View();
+        }
+
+        public IActionResult Privacy() {
             return View();
         }
 
