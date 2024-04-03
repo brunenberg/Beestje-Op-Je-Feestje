@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Models;
+using Models.Data;
 
-namespace BeestjeOpJeFeestje {
+namespace BeestjeOpJeFeestje
+{
     public class Program {
         public static void Main(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
