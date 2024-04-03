@@ -46,8 +46,8 @@ public static class SeedData {
             await roleManager.CreateAsync(adminRole);
 
             // Create Users
-            var customerUser = new Account { UserName = "customer@example.com", Email = "customer@example.com", Name = "Customer User", AddressId = address1.Id, CustomerCardId = silverCard.Id };
-            var adminUser = new Account { UserName = "admin@example.com", Email = "admin@example.com", Name = "Admin User", AddressId = address2.Id, CustomerCardId = goldCard.Id };
+            var customerUser = new Account { UserName = "customer@test.com", Email = "customer@test.com", Name = "Customer User", AddressId = address1.Id, CustomerCardId = silverCard.Id };
+            var adminUser = new Account { UserName = "admin@test.com", Email = "admin@test.com", Name = "Admin User", AddressId = address2.Id, CustomerCardId = goldCard.Id };
 
             await userManager.CreateAsync(customerUser, "Test@123");
             await userManager.CreateAsync(adminUser, "Test@123");
