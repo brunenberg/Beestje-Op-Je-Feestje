@@ -14,10 +14,8 @@ namespace Models {
             : base(options) {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            if (!optionsBuilder.IsConfigured) {
-                optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=BeestjeOpJeFeestjeDb;Trusted_Connection=True;");
-            }
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -1,17 +1,22 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace BeestjeOpJeFeestje {
     public class Program {
-        public static void Main(string[] args) {
+        public static async Task Main(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            // Add ApplicationDbContext to the DI container
+            // Add ApplicationDbContext and Identity services to the DI container
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddIdentity<Account, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             var app = builder.Build();
 
@@ -33,8 +38,19 @@ namespace BeestjeOpJeFeestje {
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.Run();
+            using (var scope = app.Services.CreateScope()) {
+                var services = scope.ServiceProvider;
+                try {
+                    var userManager = services.GetRequiredService<UserManager<Account>>();
+                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                    await SeedData.Initialize(services, userManager, roleManager);
+                } catch (Exception ex) {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred seeding the DB.");
+                }
+            }
 
+            app.Run();
         }
     }
 }
