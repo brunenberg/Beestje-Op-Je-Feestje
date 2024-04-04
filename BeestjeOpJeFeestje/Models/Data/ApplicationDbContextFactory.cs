@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore;
-using Models.Data;
+using Models;
 
 public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext> {
     public ApplicationDbContext CreateDbContext(string[] args) {
