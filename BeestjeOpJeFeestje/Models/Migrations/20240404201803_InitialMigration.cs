@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Models.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -68,19 +68,20 @@ namespace Models.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Guest",
+                name: "Guests",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AddressId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Guest", x => x.Id);
+                    table.PrimaryKey("PK_Guests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Guest_Addresses_AddressId",
+                        name: "FK_Guests_Addresses_AddressId",
                         column: x => x.AddressId,
                         principalTable: "Addresses",
                         principalColumn: "Id",
@@ -262,7 +263,8 @@ namespace Models.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    GuestId = table.Column<int>(type: "int", nullable: true)
+                    GuestId = table.Column<int>(type: "int", nullable: true),
+                    DiscountApplied = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -273,9 +275,9 @@ namespace Models.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Bookings_Guest_GuestId",
+                        name: "FK_Bookings_Guests_GuestId",
                         column: x => x.GuestId,
-                        principalTable: "Guest",
+                        principalTable: "Guests",
                         principalColumn: "Id");
                 });
 
@@ -287,8 +289,7 @@ namespace Models.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookingId = table.Column<int>(type: "int", nullable: false),
                     AnimalId = table.Column<int>(type: "int", nullable: false),
-                    PriceAtBooking = table.Column<double>(type: "float", nullable: false),
-                    DiscountApplied = table.Column<double>(type: "float", nullable: false)
+                    PriceAtBooking = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -382,8 +383,8 @@ namespace Models.Migrations
                 column: "GuestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Guest_AddressId",
-                table: "Guest",
+                name: "IX_Guests_AddressId",
+                table: "Guests",
                 column: "AddressId");
         }
 
@@ -424,7 +425,7 @@ namespace Models.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Guest");
+                name: "Guests");
 
             migrationBuilder.DropTable(
                 name: "CustomerCards");

@@ -6,7 +6,6 @@
         public int AnimalId { get; set; }
         public Animal Animal { get; set; }
         public double PriceAtBooking { get; set; }
-        public double DiscountApplied { get; set; }
     }
 
 }

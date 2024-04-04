@@ -147,7 +147,7 @@ namespace BeestjeOpJeFeestje.Controllers
 
         private BookingViewModel FillViewModel(BookingViewModel viewModel) {
             if(User.Identity.IsAuthenticated) {
-                ApplicationUser user = _context.Users
+                Account user = _context.Users
                 .Include(u => u.Address)
                 .FirstOrDefault(u => u.Email == User.Identity.Name);
 
@@ -209,6 +209,7 @@ namespace BeestjeOpJeFeestje.Controllers
             }
 
             discountPercentage = Math.Min(discountPercentage, 0.6);
+            HttpContext.Session.Set("DiscountPercentage", BitConverter.GetBytes(discountPercentage));
 
             double discountedPrice = totalPrice * (1 - discountPercentage);
             viewModel.TotalPrice = discountedPrice;
@@ -216,7 +217,7 @@ namespace BeestjeOpJeFeestje.Controllers
 
 
         public bool HasCustomerCard() {
-            ApplicationUser user = _context.Users
+            Account user = _context.Users
             .Include(u => u.CustomerCard)
             .FirstOrDefault(u => u.Email == User.Identity.Name);
 
@@ -224,58 +225,97 @@ namespace BeestjeOpJeFeestje.Controllers
         }
 
         public (bool isValid, string errorMessage) ValidateAnimals(List<Animal> selectedAnimals, CustomerCard customerCard, DateTime bookingDate) {
-            // Regel: Je mag geen beestje boeken met het type ‘Leeuw’ of ‘IJsbeer’ als je ook een beestje boekt van het type ‘Boerderijdier’
             bool hasBoerderijdier = selectedAnimals.Any(a => a.AnimalType.TypeName == "Boerderijdier");
             if(hasBoerderijdier && (selectedAnimals.Any(a => a.AnimalType.TypeName == "Leeuw") || selectedAnimals.Any(a => a.AnimalType.TypeName == "IJsbeer"))) {
                 return (false, "Je mag geen beestje boeken van het type 'Leeuw' of 'IJsbeer' als je ook een beestje boekt van het type 'Boerderijdier'.");
             }
 
-            // Regel: Je mag geen beestje boeken met de naam ‘Pinguïn’ in het weekend
             if(selectedAnimals.Any(a => a.Name == "Pinguïn" && (bookingDate.DayOfWeek == DayOfWeek.Saturday || bookingDate.DayOfWeek == DayOfWeek.Sunday))) {
                 return (false, "Je mag geen beestje boeken met de naam 'Pinguïn' in het weekend.");
             }
 
-            // Regel: Je mag geen beestje boeken van het type ‘Woestijn’ in de maanden oktober t/m februari
             if(selectedAnimals.Any(a => a.AnimalType.TypeName == "Woestijn" && (bookingDate.Month >= 10 || bookingDate.Month <= 2))) {
                 return (false, "Je mag geen beestje boeken van het type 'Woestijn' in de maanden oktober t/m februari.");
             }
 
-            // Regel: Je mag geen beestje boeken van het type ‘Sneeuw’ in de maanden juni t/m augustus
             if(selectedAnimals.Any(a => a.AnimalType.TypeName == "Sneeuw" && (bookingDate.Month >= 6 && bookingDate.Month <= 8))) {
                 return (false, "Je mag geen beestje boeken van het type 'Sneeuw' in de maanden juni t/m augustus.");
             }
 
-            // Regel: Klanten zonder klantenkaart mogen maximaal 3 dieren boeken
             if(customerCard.CardType.Equals("None") && selectedAnimals.Count > 3) {
                 return (false, "Klanten zonder klantenkaart mogen maximaal 3 dieren boeken.");
             }
 
-            // Regel: Klanten met een zilveren klantenkaart mogen 1 dier extra boeken
             if(customerCard.CardType.Equals("Silver") && selectedAnimals.Count > 4) {
                 return (false, "Klanten met een zilveren klantenkaart mogen maximaal 4 dieren boeken.");
             }
 
-            // Regel: Klanten met een platina kaart mogen daarnaast ook nog de VIP dieren boeken
             if(!customerCard.CardType.Equals("Platinum")) {
                 if(selectedAnimals.Any(a => a.AnimalType.TypeName == "VIP")) {
                     return (false, "Alleen klanten met een platina klantenkaart kunnen VIP dieren boeken.");
                 }
             }
 
-            // Regel: Klanten met een gouden kaart mogen zoveel dieren boeken als ze willen
             if(customerCard.CardType.Equals("Gold")) {
-                return (true, null); // Return true zonder foutmelding
+                return (true, null);
             }
 
-            return (true, null); // Als alle validatieregels zijn doorstaan, return true zonder foutmelding
+            return (true, null);
         }
 
         public IActionResult Confirm() {
-            // Steps to save: 1. Check if the user is signed in, if not save the user data from the session to the Guest table
+            if(!User.Identity.IsAuthenticated) {
+                Guest guest = new Guest {
+                    Name = HttpContext.Session.GetString("Name"),
+                    Email = HttpContext.Session.GetString("Email"),
+                    Address = new Address {
+                        Street = HttpContext.Session.GetString("Street"),
+                        HouseNumber = HttpContext.Session.GetString("HouseNumber"),
+                        PostalCode = HttpContext.Session.GetString("PostalCode"),
+                        City = HttpContext.Session.GetString("City")
+                    }
+                };
 
+                _context.Guests.Add(guest);
+                _context.SaveChanges();
+            }
 
-            return View("Sucess");
+            var byteArray = HttpContext.Session.Get("SelectedAnimals");
+            if(byteArray == null) {
+                return RedirectToAction("Step1");
+            }
+            List<int> selectedAnimals = new List<int>();
+            for(int i = 0; i < byteArray.Length; i += sizeof(int)) {
+                selectedAnimals.Add(BitConverter.ToInt32(byteArray, i));
+            }
+            List<Animal> animals = _context.Animals.Where(a => selectedAnimals.Contains(a.Id)).ToList();
+            string selectedDate = HttpContext.Session.GetString("SelectedDate");
+
+            Booking booking = new Booking {
+                DateTime = DateTime.Parse(selectedDate),
+                DiscountApplied = (int)(BitConverter.ToDouble(HttpContext.Session.Get("DiscountPercentage"), 0) * 100),
+            };
+
+            if(User.Identity.IsAuthenticated) {
+                booking.AccountId = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name).Id;
+            } else {
+                booking.GuestId = _context.Guests.FirstOrDefault(g => g.Email == HttpContext.Session.GetString("Email")).Id;
+            }
+
+            foreach(Animal animal in animals) {
+                booking.AnimalBookings.Add(new BookingDetail {
+                    AnimalId = animal.Id,
+                    PriceAtBooking = animal.Price
+                });
+            }
+            
+
+            _context.Bookings.Add(booking);
+            _context.SaveChanges();
+
+            return View("Success");
         }
+
 
 
     }

@@ -9,7 +9,7 @@ namespace Models {
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BookingDetail> BookingDetails { get; set; }
         public DbSet<CustomerCard> CustomerCards { get; set; }
-        public DbSet<Guest> Guest { get; set; }
+        public DbSet<Guest> Guests { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

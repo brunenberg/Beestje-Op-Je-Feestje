@@ -12,8 +12,8 @@ using Models;
 namespace Models.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240404170131_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240404201803_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -326,6 +326,9 @@ namespace Models.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("DiscountApplied")
+                        .HasColumnType("int");
+
                     b.Property<int?>("GuestId")
                         .HasColumnType("int");
 
@@ -351,9 +354,6 @@ namespace Models.Migrations
 
                     b.Property<int>("BookingId")
                         .HasColumnType("int");
-
-                    b.Property<double>("DiscountApplied")
-                        .HasColumnType("float");
 
                     b.Property<double>("PriceAtBooking")
                         .HasColumnType("float");
@@ -395,6 +395,10 @@ namespace Models.Migrations
                     b.Property<int>("AddressId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -403,7 +407,7 @@ namespace Models.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.ToTable("Guest");
+                    b.ToTable("Guests");
                 });
 
             modelBuilder.Entity("Account", b =>
