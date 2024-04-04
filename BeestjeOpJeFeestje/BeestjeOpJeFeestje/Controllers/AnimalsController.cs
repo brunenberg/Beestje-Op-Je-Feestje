@@ -61,6 +61,7 @@ namespace BeestjeOpJeFeestje.Controllers
         public async Task<IActionResult> Create([Bind("Id,Name,Price,ImagePath,AnimalTypeId")] Animal animal)
         {
             ModelState.Remove("AnimalType");
+            ModelState.Remove("BookingDetails");
             if (ModelState.IsValid)
             {
                 _context.Add(animal);
