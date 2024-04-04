@@ -1,7 +1,9 @@
 ﻿using Models;
 
-namespace BeestjeOpJeFeestje.ViewModel {
-    public class BookingViewModel {
+namespace BeestjeOpJeFeestje.ViewModels
+{
+    public class BookingViewModel
+    {
 
         public List<Animal> Animals { get; set; }
         public string SelectedDate { get; set; }

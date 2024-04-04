@@ -1,4 +1,4 @@
-using BeestjeOpJeFeestje.ViewModel;
+using BeestjeOpJeFeestje.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;

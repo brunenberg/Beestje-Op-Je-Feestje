@@ -1,11 +1,12 @@
-﻿using BeestjeOpJeFeestje.ViewModel;
+﻿using BeestjeOpJeFeestje.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models;
-using Models.Data;
 
 
-namespace BeestjeOpJeFeestje.Controllers {
+namespace BeestjeOpJeFeestje.Controllers
+{
     public class BookingController : Controller {
 
         private readonly ApplicationDbContext _context;
@@ -65,8 +66,22 @@ namespace BeestjeOpJeFeestje.Controllers {
             // Fill the ViewModel with the selected animals
             BookingViewModel viewModel = new BookingViewModel {
                 SelectedDate = HttpContext.Session.GetString("SelectedDate"),
-                SelectedAnimals = animals
+                SelectedAnimals = animals,
             };
+
+            if(User.Identity.IsAuthenticated) {
+                ApplicationUser user = _context.Users
+                .Include(u => u.Address)
+                .FirstOrDefault(u => u.Email == User.Identity.Name);
+
+
+                viewModel.Name = user.Name;
+                viewModel.Email = user.Email;
+                viewModel.Street = user.Address.Street;
+                viewModel.HouseNumber = user.Address.HouseNumber;
+                viewModel.PostalCode = user.Address.PostalCode;
+                viewModel.City = user.Address.City;
+            }
 
             return View(viewModel);
         }
