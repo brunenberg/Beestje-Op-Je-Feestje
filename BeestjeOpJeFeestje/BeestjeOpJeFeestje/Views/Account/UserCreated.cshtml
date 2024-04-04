@@ -1,0 +1,19 @@
+﻿@model UserCreatedViewModel
+
+@{
+    ViewData["Title"] = "User Created";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <p>A new user account has been created with the following details:</p>
+        <dl>
+            <dt>Email</dt>
+            <dd>@Model.Email</dd>
+            <dt>Password</dt>
+            <dd>@Model.Password</dd>
+        </dl>
+    </div>
+</div>
