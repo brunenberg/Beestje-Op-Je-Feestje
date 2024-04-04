@@ -8,11 +8,11 @@ using Models;
 
 namespace BeestjeOpJeFeestje.Controllers {
     public class AccountController : Controller {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<Account> _userManager;
+        private readonly SignInManager<Account> _signInManager;
         private readonly ApplicationDbContext _context;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext context) {
+        public AccountController(UserManager<Account> userManager, SignInManager<Account> signInManager, ApplicationDbContext context) {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
@@ -69,8 +69,8 @@ namespace BeestjeOpJeFeestje.Controllers {
                 _context.Addresses.Add(address);
                 await _context.SaveChangesAsync();
 
-                // Create a new ApplicationUser instance
-                var user = new ApplicationUser {
+                // Create a new Account instance
+                var user = new Account {
                     UserName = model.Email,
                     Email = model.Email,
                     Name = model.Name,
@@ -133,7 +133,7 @@ namespace BeestjeOpJeFeestje.Controllers {
                 HouseNumber = u.Address.HouseNumber,
                 City = u.Address.City,
                 PostalCode = u.Address.PostalCode,
-                CardType = _context.CustomerCards.FirstOrDefault(c => c.Id == u.CustomerCardId)?.CardType
+                CustomerCardType = _context.CustomerCards.FirstOrDefault(c => c.Id == u.CustomerCardId)?.CardType
             });
 
             return View(userViewModels);

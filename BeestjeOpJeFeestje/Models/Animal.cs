@@ -13,6 +13,6 @@ namespace Models {
         public int AnimalTypeId { get; set; }
         [Display(Name = "Type beestje")]
         public AnimalType AnimalType { get; set; }
-        public ICollection<BookingDetail>? BookingDetails { get; set; }
+        public ICollection<BookingDetail> BookingDetails { get; set; }
     }
 }

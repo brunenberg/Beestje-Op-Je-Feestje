@@ -23,5 +23,5 @@ public class EditUserViewModel {
     public string PostalCode { get; set; }
 
     [Required(ErrorMessage = "Selecteer alstublieft een kaarttype.")]
-    public int CardTypeId { get; set; }
+    public int? CardTypeId { get; set; }
 }
