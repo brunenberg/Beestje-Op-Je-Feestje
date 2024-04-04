@@ -100,6 +100,8 @@ namespace BeestjeOpJeFeestje.Controllers
                 return NotFound();
             }
 
+            ModelState.Remove("AnimalType");
+
             if (ModelState.IsValid)
             {
                 try
