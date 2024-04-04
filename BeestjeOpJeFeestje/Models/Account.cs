@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Models;
 
-public class Account : IdentityUser {
+namespace Models {
+    public class Account : IdentityUser {
     public string Name { get; set; }
     public int AddressId { get; set; }
     public Address Address { get; set; }
