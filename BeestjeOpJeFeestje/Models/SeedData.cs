@@ -81,7 +81,7 @@ public static class SeedData {
 
             // Type: VIP - T-Rex, Unicorn 
             Animal trex = new Animal { Name = "T-Rex", Price = 100, ImagePath = "~/images/trex.jpg", AnimalTypeId = 5 };
-            Animal unicorn = new Animal { Name = "Unicorn", Price = 200, ImagePath = "~/images/unicorn.jpg", AnimalTypeId = 5 };
+            Animal unicorn = new Animal { Name = "Eenhoorn", Price = 200, ImagePath = "~/images/eenhoorn.jpg", AnimalTypeId = 5 };
 
             context.Animals.AddRange(aap, olifant, zebra, leeuw, hond, ezel, koe, eend, kuiken, pinguin, ijsbeer, zeehond, kameel, slang, trex, unicorn);
             await context.SaveChangesAsync();
