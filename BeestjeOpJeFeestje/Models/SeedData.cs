@@ -15,11 +15,12 @@ public static class SeedData {
             }
 
             // Create CustomerCards
+            var noCard = new CustomerCard { CardType = "Geen" };
             var silverCard = new CustomerCard { CardType = "Silver" };
             var goldCard = new CustomerCard { CardType = "Gold" };
             var platinaCard = new CustomerCard { CardType = "Platina" };
 
-            context.CustomerCards.AddRange(silverCard, goldCard, platinaCard);
+            context.CustomerCards.AddRange(noCard, silverCard, goldCard, platinaCard);
             await context.SaveChangesAsync();
 
             // Create AnimalTypes
