@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 public class LoginViewModel {
-    [Required]
-    [EmailAddress]
+    [Required(ErrorMessage = "Gelieve een e-mailadres in te voeren.")]
+    [EmailAddress(ErrorMessage = "Het ingevoerde e-mailadres is niet geldig.")]
     public string Email { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Vul alstublieft uw wachtwoord in.")]
     [DataType(DataType.Password)]
     public string Password { get; set; }
 
-    [Display(Name = "Remember me?")]
+    [Display(Name = "Onthoud mij?")]
     public bool RememberMe { get; set; }
 }

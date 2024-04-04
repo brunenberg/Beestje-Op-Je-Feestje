@@ -32,7 +32,7 @@ namespace BeestjeOpJeFeestje.Controllers {
                     return RedirectToAction("Index", "Home");
                 }
                 else {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, "Ongeldige login.");
                     return View(model);
                 }
             }
