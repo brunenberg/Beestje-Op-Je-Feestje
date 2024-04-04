@@ -58,17 +58,21 @@ namespace BeestjeOpJeFeestje.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,ImagePath,AnimalTypeId")] Animal animal)
-        {
-            ModelState.Remove("AnimalType");
-            if (ModelState.IsValid)
-            {
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,ImagePath,AnimalTypeId")] CreateAnimalViewModel animalViewModel) {
+            if (ModelState.IsValid) {
+                var animal = new Animal {
+                    Id = animalViewModel.Id,
+                    Name = animalViewModel.Name,
+                    Price = animalViewModel.Price,
+                    ImagePath = animalViewModel.ImagePath,
+                    AnimalTypeId = animalViewModel.AnimalTypeId
+                };
                 _context.Add(animal);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AnimalTypeId"] = new SelectList(_context.AnimalTypes, "Id", "TypeName", animal.AnimalTypeId);
-            return View(animal);
+            ViewData["AnimalTypeId"] = new SelectList(_context.AnimalTypes, "Id", "TypeName", animalViewModel.AnimalTypeId);
+            return View(animalViewModel);
         }
 
         // GET: Animals/Edit/5
@@ -93,38 +97,36 @@ namespace BeestjeOpJeFeestje.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,ImagePath,AnimalTypeId")] Animal animal)
-        {
-            if (id != animal.Id)
-            {
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,ImagePath,AnimalTypeId")] CreateAnimalViewModel animalViewModel) {
+            if (id != animalViewModel.Id) {
                 return NotFound();
             }
 
-            ModelState.Remove("AnimalType");
+            if (ModelState.IsValid) {
+                var animal = new Animal {
+                    Id = animalViewModel.Id,
+                    Name = animalViewModel.Name,
+                    Price = animalViewModel.Price,
+                    ImagePath = animalViewModel.ImagePath,
+                    AnimalTypeId = animalViewModel.AnimalTypeId
+                };
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
+                try {
                     _context.Update(animal);
                     await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AnimalExists(animal.Id))
-                    {
+                } catch (DbUpdateConcurrencyException) {
+                    if (!AnimalExists(animal.Id)) {
                         return NotFound();
-                    }
-                    else
-                    {
+                    } else {
                         throw;
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AnimalTypeId"] = new SelectList(_context.AnimalTypes, "Id", "TypeName", animal.AnimalTypeId);
-            return View(animal);
+            ViewData["AnimalTypeId"] = new SelectList(_context.AnimalTypes, "Id", "TypeName", animalViewModel.AnimalTypeId);
+            return View(animalViewModel);
         }
+
 
         // GET: Animals/Delete/5
         public async Task<IActionResult> Delete(int? id)

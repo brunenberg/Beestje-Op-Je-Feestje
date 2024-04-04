@@ -37,7 +37,7 @@ namespace Models.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CustomerCardId")
+                    b.Property<int?>("CustomerCardId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -260,7 +260,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("Models.Animal", b =>
@@ -289,7 +289,7 @@ namespace Models.Migrations
 
                     b.HasIndex("AnimalTypeId");
 
-                    b.ToTable("Animals", (string)null);
+                    b.ToTable("Animals");
                 });
 
             modelBuilder.Entity("Models.AnimalType", b =>
@@ -306,7 +306,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AnimalTypes", (string)null);
+                    b.ToTable("AnimalTypes");
                 });
 
             modelBuilder.Entity("Models.Booking", b =>
@@ -317,12 +317,22 @@ namespace Models.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("GuestId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Bookings", (string)null);
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("GuestId");
+
+                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("Models.BookingDetail", b =>
@@ -351,7 +361,7 @@ namespace Models.Migrations
 
                     b.HasIndex("BookingId");
 
-                    b.ToTable("BookingDetails", (string)null);
+                    b.ToTable("BookingDetails");
                 });
 
             modelBuilder.Entity("Models.CustomerCard", b =>
@@ -368,7 +378,29 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CustomerCards", (string)null);
+                    b.ToTable("CustomerCards");
+                });
+
+            modelBuilder.Entity("Models.Guest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
+
+                    b.ToTable("Guest");
                 });
 
             modelBuilder.Entity("Account", b =>
@@ -381,9 +413,7 @@ namespace Models.Migrations
 
                     b.HasOne("Models.CustomerCard", "CustomerCard")
                         .WithMany()
-                        .HasForeignKey("CustomerCardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CustomerCardId");
 
                     b.Navigation("Address");
 
@@ -452,10 +482,25 @@ namespace Models.Migrations
                     b.Navigation("AnimalType");
                 });
 
+            modelBuilder.Entity("Models.Booking", b =>
+                {
+                    b.HasOne("Account", "Account")
+                        .WithMany("Bookings")
+                        .HasForeignKey("AccountId");
+
+                    b.HasOne("Models.Guest", "Guest")
+                        .WithMany("Bookings")
+                        .HasForeignKey("GuestId");
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Guest");
+                });
+
             modelBuilder.Entity("Models.BookingDetail", b =>
                 {
                     b.HasOne("Models.Animal", "Animal")
-                        .WithMany("AnimalBookings")
+                        .WithMany("BookingDetails")
                         .HasForeignKey("AnimalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -471,9 +516,25 @@ namespace Models.Migrations
                     b.Navigation("Booking");
                 });
 
+            modelBuilder.Entity("Models.Guest", b =>
+                {
+                    b.HasOne("Models.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("Account", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
             modelBuilder.Entity("Models.Animal", b =>
                 {
-                    b.Navigation("AnimalBookings");
+                    b.Navigation("BookingDetails");
                 });
 
             modelBuilder.Entity("Models.AnimalType", b =>
@@ -484,6 +545,11 @@ namespace Models.Migrations
             modelBuilder.Entity("Models.Booking", b =>
                 {
                     b.Navigation("AnimalBookings");
+                });
+
+            modelBuilder.Entity("Models.Guest", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }

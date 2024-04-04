@@ -6,5 +6,5 @@
     public string HouseNumber { get; set; }
     public string City { get; set; }
     public string PostalCode { get; set; }
-    public string CardType { get; set; }
+    public string CustomerCardType { get; set; }
 }

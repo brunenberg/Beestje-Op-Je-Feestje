@@ -55,19 +55,6 @@ namespace Models.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Bookings",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Bookings", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CustomerCards",
                 columns: table => new
                 {
@@ -78,6 +65,26 @@ namespace Models.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CustomerCards", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Guest",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AddressId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Guest", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Guest_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -130,7 +137,7 @@ namespace Models.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AddressId = table.Column<int>(type: "int", nullable: false),
-                    CustomerCardId = table.Column<int>(type: "int", nullable: false),
+                    CustomerCardId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -159,36 +166,7 @@ namespace Models.Migrations
                         name: "FK_AspNetUsers_CustomerCards_CustomerCardId",
                         column: x => x.CustomerCardId,
                         principalTable: "CustomerCards",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BookingDetails",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BookingId = table.Column<int>(type: "int", nullable: false),
-                    AnimalId = table.Column<int>(type: "int", nullable: false),
-                    PriceAtBooking = table.Column<double>(type: "float", nullable: false),
-                    DiscountApplied = table.Column<double>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BookingDetails", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BookingDetails_Animals_AnimalId",
-                        column: x => x.AnimalId,
-                        principalTable: "Animals",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_BookingDetails_Bookings_BookingId",
-                        column: x => x.BookingId,
-                        principalTable: "Bookings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -276,6 +254,59 @@ namespace Models.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Bookings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    GuestId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bookings_AspNetUsers_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Bookings_Guest_GuestId",
+                        column: x => x.GuestId,
+                        principalTable: "Guest",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookingDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookingId = table.Column<int>(type: "int", nullable: false),
+                    AnimalId = table.Column<int>(type: "int", nullable: false),
+                    PriceAtBooking = table.Column<double>(type: "float", nullable: false),
+                    DiscountApplied = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookingDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BookingDetails_Animals_AnimalId",
+                        column: x => x.AnimalId,
+                        principalTable: "Animals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookingDetails_Bookings_BookingId",
+                        column: x => x.BookingId,
+                        principalTable: "Bookings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Animals_AnimalTypeId",
                 table: "Animals",
@@ -339,6 +370,21 @@ namespace Models.Migrations
                 name: "IX_BookingDetails_BookingId",
                 table: "BookingDetails",
                 column: "BookingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_AccountId",
+                table: "Bookings",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_GuestId",
+                table: "Bookings",
+                column: "GuestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Guest_AddressId",
+                table: "Guest",
+                column: "AddressId");
         }
 
         /// <inheritdoc />
@@ -366,22 +412,25 @@ namespace Models.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Animals");
 
             migrationBuilder.DropTable(
                 name: "Bookings");
 
             migrationBuilder.DropTable(
-                name: "Addresses");
+                name: "AnimalTypes");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Guest");
 
             migrationBuilder.DropTable(
                 name: "CustomerCards");
 
             migrationBuilder.DropTable(
-                name: "AnimalTypes");
+                name: "Addresses");
         }
     }
 }
