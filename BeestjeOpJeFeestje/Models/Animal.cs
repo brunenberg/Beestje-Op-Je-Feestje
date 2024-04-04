@@ -6,6 +6,6 @@
         public string ImagePath { get; set; }
         public int AnimalTypeId { get; set; }
         public AnimalType AnimalType { get; set; }
-        public ICollection<BookingDetail> AnimalBookings { get; set; }
+        public ICollection<BookingDetail>? BookingDetails { get; set; }
     }
 }
