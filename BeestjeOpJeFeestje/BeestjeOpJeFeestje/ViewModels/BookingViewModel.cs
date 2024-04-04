@@ -14,5 +14,7 @@ namespace BeestjeOpJeFeestje.ViewModels
         public string HouseNumber { get; set; }
         public string PostalCode { get; set; }
         public string City { get; set; }
+        public double TotalPrice { get; set; }
+        public List<string> AppliedDiscounts { get; set; }
     }
 }

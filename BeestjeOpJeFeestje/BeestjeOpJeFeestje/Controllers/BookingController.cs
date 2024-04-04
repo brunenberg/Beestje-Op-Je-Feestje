@@ -63,17 +63,44 @@ namespace BeestjeOpJeFeestje.Controllers
             }
             List<Animal> animals = _context.Animals.Where(a => selectedAnimals.Contains(a.Id)).ToList();
 
-            // Fill the ViewModel with the selected animals
             BookingViewModel viewModel = new BookingViewModel {
                 SelectedDate = HttpContext.Session.GetString("SelectedDate"),
                 SelectedAnimals = animals,
             };
 
+            FillViewModel(viewModel);
+
+            return View(viewModel);
+        }
+
+        public IActionResult Step3() {
+            var byteArray = HttpContext.Session.Get("SelectedAnimals");
+            if(byteArray == null) {
+                return RedirectToAction("Step1");
+            }
+            List<int> selectedAnimals = new List<int>();
+            for(int i = 0; i < byteArray.Length; i += sizeof(int)) {
+                selectedAnimals.Add(BitConverter.ToInt32(byteArray, i));
+            }
+            List<Animal> animals = _context.Animals.Where(a => selectedAnimals.Contains(a.Id)).ToList();
+
+            BookingViewModel viewModel = new BookingViewModel {
+                SelectedDate = HttpContext.Session.GetString("SelectedDate"),
+                SelectedAnimals = animals,
+            };
+
+            FillViewModel(viewModel);
+
+            CalculateTotalPrice(viewModel);
+
+            return View(viewModel);
+        }
+
+        private BookingViewModel FillViewModel(BookingViewModel viewModel) {
             if(User.Identity.IsAuthenticated) {
                 ApplicationUser user = _context.Users
                 .Include(u => u.Address)
                 .FirstOrDefault(u => u.Email == User.Identity.Name);
-
 
                 viewModel.Name = user.Name;
                 viewModel.Email = user.Email;
@@ -83,21 +110,61 @@ namespace BeestjeOpJeFeestje.Controllers
                 viewModel.City = user.Address.City;
             }
 
-            return View(viewModel);
+            return viewModel;
         }
 
-        public IActionResult Step3() {
-            var byteArray = HttpContext.Session.Get("SelectedAnimals");
-            List<int> selectedAnimals = new List<int>();
+        private void CalculateTotalPrice(BookingViewModel viewModel) {
+            viewModel.TotalPrice = 0;
+            viewModel.AppliedDiscounts = new List<string>();
+            double basePrice = 0;
+            double totalPrice = 0;
+            bool hasEend = false;
+            bool hasA = false, hasB = false, hasC = false;
+            int animalCount = viewModel.SelectedAnimals.Count;
 
-            for(int i = 0; i < byteArray.Length; i += sizeof(int)) {
-                selectedAnimals.Add(BitConverter.ToInt32(byteArray, i));
+            foreach(Animal animal in viewModel.SelectedAnimals) {
+                basePrice += animal.Price;
+                totalPrice += animal.Name == "Eend" && new Random().Next(1, 7) == 1 ? animal.Price * 0.5 : animal.Price;
+                hasEend |= animal.Name == "Eend" && new Random().Next(1, 7) == 1;
+                hasA |= animal.Name.Contains("A");
+                hasB |= animal.Name.Contains("B");
+                hasC |= animal.Name.Contains("C");
             }
-            List<Animal> animals = _context.Animals.Where(a => selectedAnimals.Contains(a.Id)).ToList();
 
-            
+            double discountPercentage = 0;
 
-            return View();
+            if(viewModel.SelectedAnimals.GroupBy(a => a.Name).Any(g => g.Count() >= 3)) {
+                discountPercentage += 0.1;
+                viewModel.AppliedDiscounts.Add("3 Types: 10%");
+            }
+
+            DateTime selectedDate = DateTime.Parse(viewModel.SelectedDate);
+            if(selectedDate.DayOfWeek == DayOfWeek.Monday || selectedDate.DayOfWeek == DayOfWeek.Tuesday) {
+                discountPercentage += 0.15;
+                viewModel.AppliedDiscounts.Add("Maandag of Dinsdag: 15%");
+            }
+
+            discountPercentage += (hasA ? 0.02 : 0) + (hasB ? 0.02 : 0) + (hasC ? 0.02 : 0);
+            viewModel.AppliedDiscounts.AddRange(new[] { hasA ? "Letter A: 2%" : null, hasB ? "Letter B: 2%" : null, hasC ? "Letter C: 2%" : null }.Where(s => s != null));
+
+            if(HasCustomerCard()) {
+                discountPercentage += 0.1;
+                viewModel.AppliedDiscounts.Add("Klantenkaart: 10%");
+            }
+
+            discountPercentage = Math.Min(discountPercentage, 0.6);
+
+            double discountedPrice = totalPrice * (1 - discountPercentage);
+            viewModel.TotalPrice = discountedPrice;
+        }
+
+
+        public bool HasCustomerCard() {
+            ApplicationUser user = _context.Users
+            .Include(u => u.CustomerCard)
+            .FirstOrDefault(u => u.Email == User.Identity.Name);
+
+            return user?.CustomerCard != null;
         }
     }
 }
