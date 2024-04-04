@@ -32,7 +32,7 @@
             <div class="animal-grid">
                 @foreach(var animal in Model.Animals) {
                     <div class="animal-block">
-                        <img src="@animal.ImagePath" class="w-50" />
+                        <img src="@Url.Content(animal.ImagePath)" class="w-50" />
                         <label>
                             @animal.Name
                             <input type="checkbox" name="selectedAnimals" value="@animal.Id" />

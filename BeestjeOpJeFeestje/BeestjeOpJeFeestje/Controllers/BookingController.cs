@@ -115,14 +115,15 @@ namespace BeestjeOpJeFeestje.Controllers
 
         [HttpPost]
         public IActionResult Step3() {
-            HttpContext.Session.SetString("Name", Request.Form["Name"]);
-            HttpContext.Session.SetString("Email", Request.Form["Email"]);
-            HttpContext.Session.SetString("Street", Request.Form["Street"]);
-            HttpContext.Session.SetString("HouseNumber", Request.Form["HouseNumber"]);
-            HttpContext.Session.SetString("PostalCode", Request.Form["PostalCode"]);
-            HttpContext.Session.SetString("City", Request.Form["City"]);
-
-
+            if(!User.Identity.IsAuthenticated) {
+                HttpContext.Session.SetString("Name", Request.Form["Name"]);
+                HttpContext.Session.SetString("Email", Request.Form["Email"]);
+                HttpContext.Session.SetString("Street", Request.Form["Street"]);
+                HttpContext.Session.SetString("HouseNumber", Request.Form["HouseNumber"]);
+                HttpContext.Session.SetString("PostalCode", Request.Form["PostalCode"]);
+                HttpContext.Session.SetString("City", Request.Form["City"]);
+            }
+            
             var byteArray = HttpContext.Session.Get("SelectedAnimals");
             if(byteArray == null) {
                 return RedirectToAction("Step1");
@@ -225,9 +226,9 @@ namespace BeestjeOpJeFeestje.Controllers
         }
 
         public (bool isValid, string errorMessage) ValidateAnimals(List<Animal> selectedAnimals, CustomerCard customerCard, DateTime bookingDate) {
-            bool hasBoerderijdier = selectedAnimals.Any(a => a.AnimalType.TypeName == "Boerderijdier");
-            if(hasBoerderijdier && (selectedAnimals.Any(a => a.AnimalType.TypeName == "Leeuw") || selectedAnimals.Any(a => a.AnimalType.TypeName == "IJsbeer"))) {
-                return (false, "Je mag geen beestje boeken van het type 'Leeuw' of 'IJsbeer' als je ook een beestje boekt van het type 'Boerderijdier'.");
+            bool hasBoerderijdier = selectedAnimals.Any(a => a.AnimalType.TypeName == "Boerderij");
+            if(hasBoerderijdier && (selectedAnimals.Any(a => a.Name == "Leeuw") || selectedAnimals.Any(a => a.Name == "IJsbeer"))) {
+                return (false, "Je mag geen 'Leeuw' of 'IJsbeer' boeken als je ook een beestje boekt van het type 'Boerderijdier'.");
             }
 
             if(selectedAnimals.Any(a => a.Name == "Pinguïn" && (bookingDate.DayOfWeek == DayOfWeek.Saturday || bookingDate.DayOfWeek == DayOfWeek.Sunday))) {
@@ -302,15 +303,17 @@ namespace BeestjeOpJeFeestje.Controllers
                 booking.GuestId = _context.Guests.FirstOrDefault(g => g.Email == HttpContext.Session.GetString("Email")).Id;
             }
 
-            foreach(Animal animal in animals) {
-                booking.AnimalBookings.Add(new BookingDetail {
-                    AnimalId = animal.Id,
-                    PriceAtBooking = animal.Price
-                });
-            }
-            
-
             _context.Bookings.Add(booking);
+            _context.SaveChanges();
+
+            foreach(Animal animal in animals) {
+                BookingDetail bookingDetail = new BookingDetail {
+                    AnimalId = animal.Id,
+                    BookingId = booking.Id,
+                    PriceAtBooking = animal.Price
+                };
+                _context.BookingDetails.Add(bookingDetail);
+            }
             _context.SaveChanges();
 
             return View("Success");

@@ -65,7 +65,7 @@
         <p>Gekozen beestjes:</p>
         <div class="d-flex">
             @foreach(var animal in Model.SelectedAnimals) {
-                <img src="@animal.ImagePath" class="small-photo" />
+                <img src="@Url.Content(animal.ImagePath)" class="small-photo" />
             }
         </div>
         
