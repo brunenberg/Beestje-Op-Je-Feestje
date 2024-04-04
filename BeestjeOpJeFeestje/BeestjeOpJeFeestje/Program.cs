@@ -27,7 +27,7 @@ namespace BeestjeOpJeFeestje
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            builder.Services.AddScoped<IHtmlHelper, HtmlHelper<BookingViewModel>>();
+            builder.Services.AddScoped<IHtmlHelper<BookingViewModel>, HtmlHelper<BookingViewModel>>();
 
             var app = builder.Build();
 
