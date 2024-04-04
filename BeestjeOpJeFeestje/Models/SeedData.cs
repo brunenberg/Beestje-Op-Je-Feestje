@@ -5,7 +5,7 @@ using Models;
 using Models;
 
 public static class SeedData {
-    public static async Task Initialize(IServiceProvider serviceProvider, UserManager<Account> userManager, RoleManager<IdentityRole> roleManager) {
+    public static async Task Initialize(IServiceProvider serviceProvider, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager) {
         using (var context = new ApplicationDbContext(
             serviceProvider.GetRequiredService<
                 DbContextOptions<ApplicationDbContext>>())) {
@@ -15,11 +15,12 @@ public static class SeedData {
             }
 
             // Create CustomerCards
+            var noCard = new CustomerCard { CardType = "Geen" };
             var silverCard = new CustomerCard { CardType = "Silver" };
             var goldCard = new CustomerCard { CardType = "Gold" };
             var platinaCard = new CustomerCard { CardType = "Platina" };
 
-            context.CustomerCards.AddRange(silverCard, goldCard, platinaCard);
+            context.CustomerCards.AddRange(noCard, silverCard, goldCard, platinaCard);
             await context.SaveChangesAsync();
 
             // Create AnimalTypes
