@@ -1,4 +1,7 @@
+using BeestjeOpJeFeestje.ViewModel;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Data;
@@ -8,6 +11,11 @@ namespace BeestjeOpJeFeestje
     public class Program {
         public static async Task Main(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -19,6 +27,8 @@ namespace BeestjeOpJeFeestje
             builder.Services.AddIdentity<Account, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            builder.Services.AddScoped<IHtmlHelper, HtmlHelper<BookingViewModel>>();
 
             var app = builder.Build();
 
@@ -35,6 +45,8 @@ namespace BeestjeOpJeFeestje
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",

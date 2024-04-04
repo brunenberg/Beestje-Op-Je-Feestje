@@ -57,7 +57,7 @@ public static class SeedData {
             await userManager.AddToRoleAsync(adminUser, "Admin");
 
             // Create Animals
-            for (int i = 1; i <= 130; i++) {
+            for (int i = 1; i <= 10; i++) {
                 var animal = new Animal { Name = $"Animal {i}", Price = i, ImagePath = $"~/images/animal{i}.jpg", AnimalTypeId = i % 5 + 1 };
                 context.Animals.Add(animal);
             }
