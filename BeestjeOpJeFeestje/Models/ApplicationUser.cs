@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Models;
 
 public class ApplicationUser : IdentityUser {
     public string Name { get; set; }

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using Models.Data;
+using Models;
 
 namespace BeestjeOpJeFeestje.Controllers
 {

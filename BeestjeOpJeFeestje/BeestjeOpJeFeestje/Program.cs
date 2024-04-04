@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using Models.Data;
 
 namespace BeestjeOpJeFeestje
 {
