@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Models.Data
-{
-    public class ApplicationDbContext : IdentityDbContext<Account>
-    {
+namespace Models {
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser> {
         public DbSet<Animal> Animals { get; set; }
         public DbSet<AnimalType> AnimalTypes { get; set; }
         public DbSet<Address> Addresses { get; set; }
@@ -27,6 +25,18 @@ namespace Models.Data
         
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
+
+            // Configure the one-to-one relationship between ApplicationUser and Address
+            modelBuilder.Entity<ApplicationUser>()
+                .HasOne(u => u.Address)
+                .WithOne()
+                .HasForeignKey<ApplicationUser>(u => u.AddressId);
+
+            // Configure the one-to-one relationship between ApplicationUser and CustomerCard
+            modelBuilder.Entity<ApplicationUser>()
+                .HasOne(u => u.CustomerCard)
+                .WithOne()
+                .HasForeignKey<ApplicationUser>(u => u.CustomerCardId);
         }
     }
 }

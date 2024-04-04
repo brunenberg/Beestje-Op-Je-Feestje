@@ -1,0 +1,34 @@
+﻿@model IEnumerable<UserViewModel>
+
+@{
+    ViewData["Title"] = "Gebruikers";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<a asp-action="CreateUser">Nieuwe gebruiker</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Naam</th>
+            <th>Adres</th>
+            <th>Klantenkaart</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var user in Model) {
+            <tr>
+                <td>@user.Email</td>
+                <td>@user.Name</td>
+                <td>@user.Street @user.HouseNumber, @user.City @user.PostalCode</td>
+                <td>@user.CardType</td>
+                <td>
+                    <a asp-action="EditUser" asp-route-id="@user.Id">Bewerken</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
