@@ -11,6 +11,11 @@ namespace BeestjeOpJeFeestje.Controllers {
         }
 
         public IActionResult Index() {
+            if(TempData["ErrorMessage"] != null) {
+                ViewBag.ErrorMessage = TempData["ErrorMessage"];
+                TempData.Remove("ErrorMessage");
+            }
+
             return View();
         }
 

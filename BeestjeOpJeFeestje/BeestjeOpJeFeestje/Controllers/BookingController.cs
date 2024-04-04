@@ -16,43 +16,41 @@ namespace BeestjeOpJeFeestje.Controllers
         }
         public IActionResult Start(DateTime? selectedDate) {
             if(selectedDate.HasValue) {
-                string selectedDateString = selectedDate.Value.ToString("yyyy-MM-dd");
+                if(selectedDate.Value < DateTime.Today) {
+                    TempData["ErrorMessage"] = "Je kunt geen datum in het verleden selecteren.";
+                    return RedirectToAction("Index", "Home");
+                }
 
+                string selectedDateString = selectedDate.Value.ToString("dd-MM-yyyy");
                 HttpContext.Session.SetString("SelectedDate", selectedDateString);
             }
             else {
                 HttpContext.Session.Remove("SelectedDate");
             }
 
-            BookingViewModel viewModel = new BookingViewModel {
-                SelectedDate = HttpContext.Session.GetString("SelectedDate")
-            };
-
-            return RedirectToAction("Step1", viewModel);
+            return RedirectToAction("Step1");
         }
 
-        public IActionResult Step1(BookingViewModel viewModel) {
+        public IActionResult Step1() {
+            BookingViewModel viewModel = new BookingViewModel();
+
             if(TempData.ContainsKey("ErrorMessage")) {
                 ViewBag.ErrorMessage = TempData["ErrorMessage"];
-                TempData.Remove("ErrorMessage"); // Remove the error message from TempData
+                TempData.Remove("ErrorMessage"); // Verwijder het foutbericht uit TempData
             }
 
-            if(string.IsNullOrEmpty(viewModel.SelectedDate)) 
-            {
-                if(HttpContext.Session.GetString("SelectedDate") == null) 
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-                else 
-                {
-                    viewModel.SelectedDate = HttpContext.Session.GetString("SelectedDate");
-                }
+            if(HttpContext.Session.GetString("SelectedDate") == null) {
+                return RedirectToAction("Index", "Home");
             }
-
+            else {
+                viewModel.SelectedDate = HttpContext.Session.GetString("SelectedDate");
+            }
 
             viewModel.Animals = _context.Animals.ToList();
+
             return View(viewModel);
         }
+
 
         [HttpPost]
         public IActionResult Step2(List<int> selectedAnimals) {
@@ -226,6 +224,10 @@ namespace BeestjeOpJeFeestje.Controllers
         }
 
         public (bool isValid, string errorMessage) ValidateAnimals(List<Animal> selectedAnimals, CustomerCard customerCard, DateTime bookingDate) {
+            if(selectedAnimals.Count == 0) {
+                return (false, "Je moet minimaal 1 beestje boeken.");
+            }
+
             bool hasBoerderijdier = selectedAnimals.Any(a => a.AnimalType.TypeName == "Boerderij");
             if(hasBoerderijdier && (selectedAnimals.Any(a => a.Name == "Leeuw") || selectedAnimals.Any(a => a.Name == "IJsbeer"))) {
                 return (false, "Je mag geen 'Leeuw' of 'IJsbeer' boeken als je ook een beestje boekt van het type 'Boerderijdier'.");
