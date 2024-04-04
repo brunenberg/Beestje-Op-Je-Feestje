@@ -260,7 +260,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("Models.Animal", b =>
@@ -289,7 +289,7 @@ namespace Models.Migrations
 
                     b.HasIndex("AnimalTypeId");
 
-                    b.ToTable("Animals");
+                    b.ToTable("Animals", (string)null);
                 });
 
             modelBuilder.Entity("Models.AnimalType", b =>
@@ -306,7 +306,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AnimalTypes");
+                    b.ToTable("AnimalTypes", (string)null);
                 });
 
             modelBuilder.Entity("Models.Booking", b =>
@@ -322,7 +322,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("Models.BookingDetail", b =>
@@ -351,7 +351,7 @@ namespace Models.Migrations
 
                     b.HasIndex("BookingId");
 
-                    b.ToTable("BookingDetails");
+                    b.ToTable("BookingDetails", (string)null);
                 });
 
             modelBuilder.Entity("Models.CustomerCard", b =>
@@ -368,7 +368,7 @@ namespace Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CustomerCards");
+                    b.ToTable("CustomerCards", (string)null);
                 });
 
             modelBuilder.Entity("Account", b =>
