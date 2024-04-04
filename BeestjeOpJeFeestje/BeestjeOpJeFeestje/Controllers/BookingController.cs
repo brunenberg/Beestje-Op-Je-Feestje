@@ -318,6 +318,8 @@ namespace BeestjeOpJeFeestje.Controllers
             }
             _context.SaveChanges();
 
+            HttpContext.Session.Clear();
+
             return View("Success");
         }
 
