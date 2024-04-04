@@ -113,7 +113,16 @@ namespace BeestjeOpJeFeestje.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
         public IActionResult Step3() {
+            HttpContext.Session.SetString("Name", Request.Form["Name"]);
+            HttpContext.Session.SetString("Email", Request.Form["Email"]);
+            HttpContext.Session.SetString("Street", Request.Form["Street"]);
+            HttpContext.Session.SetString("HouseNumber", Request.Form["HouseNumber"]);
+            HttpContext.Session.SetString("PostalCode", Request.Form["PostalCode"]);
+            HttpContext.Session.SetString("City", Request.Form["City"]);
+
+
             var byteArray = HttpContext.Session.Get("SelectedAnimals");
             if(byteArray == null) {
                 return RedirectToAction("Step1");
@@ -148,6 +157,13 @@ namespace BeestjeOpJeFeestje.Controllers
                 viewModel.HouseNumber = user.Address.HouseNumber;
                 viewModel.PostalCode = user.Address.PostalCode;
                 viewModel.City = user.Address.City;
+            } else {
+                viewModel.Name = HttpContext.Session.GetString("Name");
+                viewModel.Email = HttpContext.Session.GetString("Email");
+                viewModel.Street = HttpContext.Session.GetString("Street");
+                viewModel.HouseNumber = HttpContext.Session.GetString("HouseNumber");
+                viewModel.PostalCode = HttpContext.Session.GetString("PostalCode");
+                viewModel.City = HttpContext.Session.GetString("City");
             }
 
             return viewModel;
@@ -252,6 +268,13 @@ namespace BeestjeOpJeFeestje.Controllers
             }
 
             return (true, null); // Als alle validatieregels zijn doorstaan, return true zonder foutmelding
+        }
+
+        public IActionResult Confirm() {
+            // Steps to save: 1. Check if the user is signed in, if not save the user data from the session to the Guest table
+
+
+            return View("Sucess");
         }
 
 
