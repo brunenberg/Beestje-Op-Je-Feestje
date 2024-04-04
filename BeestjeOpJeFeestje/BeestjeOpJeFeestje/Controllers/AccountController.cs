@@ -69,7 +69,7 @@ namespace BeestjeOpJeFeestje.Controllers {
                 _context.Addresses.Add(address);
                 await _context.SaveChangesAsync();
 
-                // Create a new ApplicationUser instance
+                // Create a new Account instance
                 var user = new Account {
                     UserName = model.Email,
                     Email = model.Email,

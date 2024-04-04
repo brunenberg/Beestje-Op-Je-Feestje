@@ -26,18 +26,6 @@ namespace Models {
         
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
-
-            // Configure the one-to-one relationship between ApplicationUser and Address
-            modelBuilder.Entity<ApplicationUser>()
-                .HasOne(u => u.Address)
-                .WithOne()
-                .HasForeignKey<ApplicationUser>(u => u.AddressId);
-
-            // Configure the one-to-one relationship between ApplicationUser and CustomerCard
-            modelBuilder.Entity<ApplicationUser>()
-                .HasOne(u => u.CustomerCard)
-                .WithOne()
-                .HasForeignKey<ApplicationUser>(u => u.CustomerCardId);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace BeestjeOpJeFeestje
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+            builder.Services.AddIdentity<Account, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -42,7 +42,7 @@ namespace BeestjeOpJeFeestje
             using (var scope = app.Services.CreateScope()) {
                 var services = scope.ServiceProvider;
                 try {
-                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                    var userManager = services.GetRequiredService<UserManager<Account>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     await SeedData.Initialize(services, userManager, roleManager);
                 } catch (Exception ex) {
