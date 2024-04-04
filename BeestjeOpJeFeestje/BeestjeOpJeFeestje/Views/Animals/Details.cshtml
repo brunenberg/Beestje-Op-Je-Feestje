@@ -7,7 +7,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Animal</h4>
+    <h4>Beestje</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -28,6 +28,12 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ImagePath)
         </dd>
+        <dt class="col-sm-2">
+            Afbeelding
+        </dt>
+        <dd class="col-sm-10">
+            <img src="@Url.Content(Model.ImagePath)" alt="Image" />
+        </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.AnimalType)
         </dt>
@@ -37,6 +43,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Bewerken</a> |
+    <a asp-action="Index">Terug naar lijst</a>
 </div>
