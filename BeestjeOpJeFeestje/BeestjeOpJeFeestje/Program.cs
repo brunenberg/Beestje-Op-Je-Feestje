@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.Data;
 
-namespace BeestjeOpJeFeestje {
+namespace BeestjeOpJeFeestje
+{
     public class Program {
         public static async Task Main(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
