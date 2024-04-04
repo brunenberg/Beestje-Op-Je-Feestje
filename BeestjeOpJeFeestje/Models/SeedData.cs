@@ -2,10 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
-using Models.Data;
+using Models;
 
 public static class SeedData {
-    public static async Task Initialize(IServiceProvider serviceProvider, UserManager<Account> userManager, RoleManager<IdentityRole> roleManager) {
+    public static async Task Initialize(IServiceProvider serviceProvider, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager) {
         using (var context = new ApplicationDbContext(
             serviceProvider.GetRequiredService<
                 DbContextOptions<ApplicationDbContext>>())) {
@@ -15,11 +15,12 @@ public static class SeedData {
             }
 
             // Create CustomerCards
+            var noCard = new CustomerCard { CardType = "Geen" };
             var silverCard = new CustomerCard { CardType = "Silver" };
             var goldCard = new CustomerCard { CardType = "Gold" };
             var platinaCard = new CustomerCard { CardType = "Platina" };
 
-            context.CustomerCards.AddRange(silverCard, goldCard, platinaCard);
+            context.CustomerCards.AddRange(noCard, silverCard, goldCard, platinaCard);
             await context.SaveChangesAsync();
 
             // Create AnimalTypes
@@ -47,8 +48,8 @@ public static class SeedData {
             await roleManager.CreateAsync(adminRole);
 
             // Create Users
-            var customerUser = new Account { UserName = "customer@test.com", Email = "customer@test.com", Name = "Customer User", AddressId = address1.Id, CustomerCardId = silverCard.Id };
-            var adminUser = new Account { UserName = "admin@test.com", Email = "admin@test.com", Name = "Admin User", AddressId = address2.Id, CustomerCardId = goldCard.Id };
+            var customerUser = new ApplicationUser { UserName = "customer@test.com", Email = "customer@test.com", Name = "Customer User", AddressId = address1.Id, CustomerCardId = silverCard.Id };
+            var adminUser = new ApplicationUser { UserName = "admin@test.com", Email = "admin@test.com", Name = "Admin User", AddressId = address2.Id, CustomerCardId = goldCard.Id };
 
             await userManager.CreateAsync(customerUser, "Test@123");
             await userManager.CreateAsync(adminUser, "Test@123");
