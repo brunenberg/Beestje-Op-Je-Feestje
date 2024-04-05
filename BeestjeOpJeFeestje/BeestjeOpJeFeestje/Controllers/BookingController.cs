@@ -153,6 +153,7 @@ namespace BeestjeOpJeFeestje.Controllers {
 
             viewModel.TotalPrice = Math.Round(totalPrice * (1 - discountInfo.Item1 / 100), 2);
             viewModel.AppliedDiscounts = discountInfo.Item2;
+            HttpContext.Session.Set("DiscountPercentage", BitConverter.GetBytes(discountInfo.Item1));
 
             return View(viewModel);
         }
@@ -220,7 +221,7 @@ namespace BeestjeOpJeFeestje.Controllers {
 
             Booking booking = new Booking {
                 DateTime = DateTime.Parse(selectedDate),
-                DiscountApplied = (int)(BitConverter.ToDouble(HttpContext.Session.Get("DiscountPercentage"), 0) * 100),
+                DiscountApplied = (int)BitConverter.ToDouble(HttpContext.Session.Get("DiscountPercentage"), 0),
             };
 
             if (User.Identity.IsAuthenticated) {
