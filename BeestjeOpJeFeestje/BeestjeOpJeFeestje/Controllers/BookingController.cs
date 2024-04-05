@@ -1,6 +1,7 @@
 ﻿using BeestjeOpJeFeestje.ViewModels;
 using BusinessLogic;
 using BusinessLogic.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ namespace BeestjeOpJeFeestje.Controllers
             _bookingRules = bookingRules;  
         }
 
+        [Authorize(Roles = "Customer")]
         public IActionResult Index() {
             // Get all bookings which the user has made
             List<Booking> bookings = _context.Bookings
@@ -28,7 +30,7 @@ namespace BeestjeOpJeFeestje.Controllers
                 .ToList();
 
             return View(bookings);
-        }        
+        }
 
         public IActionResult Start(DateTime? selectedDate) {
             if(selectedDate.HasValue) {
@@ -290,7 +292,17 @@ namespace BeestjeOpJeFeestje.Controllers
 
             HttpContext.Session.Clear();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Success", booking);
+        }
+
+        public IActionResult Success(Booking booking) {
+            // Include the animals in the booking
+            booking = _context.Bookings
+                .Include(b => b.AnimalBookings)
+                .ThenInclude(bd => bd.Animal)
+                .FirstOrDefault(b => b.Id == booking.Id);
+
+            return View(booking);
         }
 
         public IActionResult Cancel(int id) {

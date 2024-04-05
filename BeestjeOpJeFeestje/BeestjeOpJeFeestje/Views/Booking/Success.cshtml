@@ -1,1 +1,21 @@
-﻿<p>Gelukt!</p>
+﻿@model Models.Booking
+
+<h1>Boeking bevestiging</h1>
+<p>Uw boeking is succesvol ontvangen. Dit zijn de details van uw boeking.</p>
+
+<p>Datum: @Model.DateTime.ToString("dd-MM-yyyy")</p>
+<p>Beestjes geboekt:</p>
+<ul>
+    @foreach (var animal in Model.AnimalBookings)
+    {
+        <li>@animal.Animal.Name - €@animal.Animal.Price</li>
+    }
+</ul>
+
+@{
+        var totalPrice = Model.AnimalBookings.Sum(ab => ab.Animal.Price);
+
+}
+
+<p>Ontvangen korting: @Model.DiscountApplied%</p>
+<p>Totaalprijs: €@totalPrice</p>
