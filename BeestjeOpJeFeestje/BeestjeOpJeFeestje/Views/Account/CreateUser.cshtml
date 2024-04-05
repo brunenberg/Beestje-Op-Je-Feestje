@@ -43,6 +43,7 @@
             <div class="form-group">
                 <label asp-for="CardTypeId">Klantenkaart</label>
                 <select asp-for="CardTypeId" asp-items="@(new SelectList(ViewBag.CardTypes, "Id", "CardType"))" class="form-control">
+                    <option value="">Geen</option>
                 </select>
                 <span asp-validation-for="CardTypeId" class="text-danger"></span>
             </div>
