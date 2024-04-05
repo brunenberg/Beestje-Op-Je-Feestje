@@ -18,6 +18,18 @@ namespace BeestjeOpJeFeestje.Controllers
             _context = context;
             _bookingRules = bookingRules;  
         }
+
+        public IActionResult Index() {
+            // Get all bookings which the user has made
+            List<Booking> bookings = _context.Bookings
+                .Include(b => b.AnimalBookings)
+                .ThenInclude(bd => bd.Animal)
+                .Where(b => b.AccountId == _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name).Id)
+                .ToList();
+
+            return View(bookings);
+        }        
+
         public IActionResult Start(DateTime? selectedDate) {
             if(selectedDate.HasValue) {
                 if(selectedDate.Value < DateTime.Today) {
@@ -278,7 +290,26 @@ namespace BeestjeOpJeFeestje.Controllers
 
             HttpContext.Session.Clear();
 
-            return View("Success");
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Cancel(int id) {
+            Booking booking = _context.Bookings
+                .Include(b => b.AnimalBookings)
+                .FirstOrDefault(b => b.Id == id);
+
+            if(booking == null) {
+                return NotFound();
+            }
+
+            if(booking.AccountId != _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name).Id) {
+                return Unauthorized();
+            }
+
+            _context.Bookings.Remove(booking);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
 

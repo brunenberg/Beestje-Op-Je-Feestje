@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Models.Booking>
+
+@{
+    ViewData["Title"] = "Mijn boekingen";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if(Model.Any()) {
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Datum</th>
+                <th>Dieren</th>
+                <th>Korting</th>
+                <th>Acties</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var booking in Model) {
+                <tr>
+                    <td>@booking.DateTime.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <ul>
+                            @foreach(var animalBooking in booking.AnimalBookings) {
+                                <li>@animalBooking.Animal.Name</li>
+                            }
+                        </ul>
+                    </td>
+                    <td>@booking.DiscountApplied%</td>
+                    <td>
+                        <a href="@Url.Action("Cancel", "Booking", new { id = booking.Id })" class="btn btn-danger">Annuleer boeking</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else {
+    <p>Je hebt nog geen boekingen.</p>
+}
