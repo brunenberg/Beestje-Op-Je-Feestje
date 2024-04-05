@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using System.Threading.Tasks;
-using Models;
 
 namespace BeestjeOpJeFeestje.Controllers {
     public class AccountController : Controller {
