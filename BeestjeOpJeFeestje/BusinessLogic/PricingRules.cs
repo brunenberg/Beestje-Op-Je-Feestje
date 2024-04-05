@@ -1,9 +1,8 @@
 ﻿using BusinessLogic.Interfaces;
 using Models;
-using System.Data.SqlTypes;
 
 namespace BusinessLogic {
-    public class PriceRules : IPriceRules {
+    public class PricingRules : IPricingRules {
         public double CalculateAnimalsPrice(List<Animal> animals) {
             double totalPrice = 0;
             foreach (Animal animal in animals) {

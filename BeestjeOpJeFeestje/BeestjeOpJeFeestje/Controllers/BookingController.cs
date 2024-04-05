@@ -11,12 +11,12 @@ namespace BeestjeOpJeFeestje.Controllers {
 
         private readonly ApplicationDbContext _context;
         private readonly IBookingRules _bookingRules;
-        private readonly IPriceRules _priceRules;
+        private readonly IPricingRules _priceRules;
 
-        public BookingController(ApplicationDbContext context) {
+        public BookingController(ApplicationDbContext context, IBookingRules bookingRules, IPricingRules pricingRules) {
             _context = context;
-            _bookingRules = new BookingRules();
-            _priceRules = new PriceRules();
+            _bookingRules = bookingRules;
+            _priceRules = pricingRules;
         }
         public IActionResult Start(DateTime? selectedDate) {
             if (selectedDate.HasValue) {
