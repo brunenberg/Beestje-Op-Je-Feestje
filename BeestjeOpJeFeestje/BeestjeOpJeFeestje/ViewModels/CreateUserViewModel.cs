@@ -20,6 +20,5 @@ public class CreateUserViewModel {
     [Required(ErrorMessage = "Vul alstublieft de postcode in.")]
     public string PostalCode { get; set; }
 
-    [Required(ErrorMessage = "Selecteer alstublieft een kaarttype.")]
     public int? CardTypeId { get; set; }
 }
