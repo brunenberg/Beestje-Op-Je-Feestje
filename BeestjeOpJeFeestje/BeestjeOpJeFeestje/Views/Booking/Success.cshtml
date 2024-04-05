@@ -14,6 +14,10 @@
 
 @{
         var totalPrice = Model.AnimalBookings.Sum(ab => ab.Animal.Price);
+        if (Model.DiscountApplied > 0)
+        {
+            totalPrice = totalPrice - (totalPrice * Model.DiscountApplied / 100);
+        }
 
 }
 
