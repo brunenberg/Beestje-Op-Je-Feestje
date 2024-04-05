@@ -7,5 +7,7 @@
         public int? GuestId { get; set; }
         public Guest? Guest { get; set; }
         public ICollection<BookingDetail> AnimalBookings { get; set; }
+        public int DiscountApplied { get; set; }
+
     }
 }

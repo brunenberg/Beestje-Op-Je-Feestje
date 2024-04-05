@@ -1,0 +1,54 @@
+﻿@model BeestjeOpJeFeestje.ViewModels.BookingViewModel
+
+<div class="row justify-content-center">
+    <div class="col-auto">
+        <div class="step-bar">
+            <div class="step active">
+                <span class="step-number">1</span>
+                <span class="step-label">Beestjes</span>
+            </div>
+            <div class="step">
+                <span class="step-number">2</span>
+                <span class="step-label">Gegevens</span>
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <span class="step-label">Bevestig</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4>Stap 1 - Kies je beestjes</h4>
+<div class="d-flex">
+    <div class="booking-container box">
+        @if(ViewBag.ErrorMessage != null) {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+
+        <form asp-controller="Booking" asp-action="Step2" method="POST">
+            <div class="animal-grid">
+                @foreach(var animal in Model.Animals) {
+                    <div class="animal-card">
+                        <img src="@Url.Content(animal.ImagePath)" class="animal-image" />
+                        <div class="animal-details">
+                            <h2>@animal.Name</h2>
+                            <input type="checkbox" name="selectedAnimals" value="@animal.Id" id="animal-@animal.Id" />
+                            <label for="animal-@animal.Id">Selecteer</label>
+                        </div>
+                    </div>
+                }
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-success">Volgende stap</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="info-container box">
+        <p>Gekozen datum: @Model.SelectedDate</p>
+    </div>
+</div>

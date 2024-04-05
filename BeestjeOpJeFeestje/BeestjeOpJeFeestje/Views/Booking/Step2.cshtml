@@ -1,0 +1,73 @@
+﻿@using BeestjeOpJeFeestje.Helpers
+@model BeestjeOpJeFeestje.ViewModels.BookingViewModel
+@inject Microsoft.AspNetCore.Mvc.Rendering.IHtmlHelper<BeestjeOpJeFeestje.ViewModels.BookingViewModel> Html
+
+<div class="row justify-content-center">
+    <div class="col-auto">
+        <div class="step-bar">
+            <div class="step">
+                <span class="step-number">1</span>
+                <span class="step-label">Beestjes</span>
+            </div>
+            <div class="step active">
+                <span class="step-number">2</span>
+                <span class="step-label">Gegevens</span>
+            </div>
+            <div class="step">
+                <span class="step-number">3</span>
+                <span class="step-label">Bevestig</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4>Stap 2 - Vul je contactgegevens in</h4>
+<div class="d-flex">
+    <div class="booking-container box">
+        <form asp-controller="Booking" asp-action="Step3" method="POST">
+            <div class="form-group">
+                <label for="name">Naam:</label>
+                <input type="text" id="name" name="name" class="form-control" value="@Model.Name" @Html.DisabledIfLoggedIn() />
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email" class="form-control" value="@Model.Email" @Html.DisabledIfLoggedIn() />
+            </div>
+            <div class="form-group">
+                <label for="street">Straat:</label>
+                <input type="text" id="street" name="street" class="form-control" value="@Model.Street" @Html.DisabledIfLoggedIn() />
+            </div>
+            <div class="form-group">
+                <label for="houseNumber">Huisnummer:</label>
+                <input type="text" id="houseNumber" name="houseNumber" class="form-control" value="@Model.HouseNumber" @Html.DisabledIfLoggedIn() />
+            </div>
+            <div class="form-group">
+                <label for="postalCode">Postcode:</label>
+                <input type="text" id="postalCode" name="postalCode" class="form-control" value="@Model.PostalCode" @Html.DisabledIfLoggedIn() />
+            </div>
+            <div class="form-group">
+                <label for="city">Stad:</label>
+                <input type="text" id="city" name="city" class="form-control" value="@Model.City" @Html.DisabledIfLoggedIn() />
+            </div>
+            <button type="submit" class="btn btn-success mt-3">Volgende stap</button>
+        </form>
+
+        @if(!User.Identity.IsAuthenticated) {
+            <div class="text-center mt-3">
+                <p>Heb je al een account?</p>
+                <a class="btn btn-primary" href="~/Account/Login">Inloggen</a>
+            </div>
+        }
+    </div>
+
+    <div class="info-container box">
+        <p>Gekozen datum: @Model.SelectedDate</p>
+        <p>Gekozen beestjes:</p>
+        <div class="d-flex">
+            @foreach(var animal in Model.SelectedAnimals) {
+                <img src="@Url.Content(animal.ImagePath)" class="small-photo" />
+            }
+        </div>
+        
+    </div>
+</div>

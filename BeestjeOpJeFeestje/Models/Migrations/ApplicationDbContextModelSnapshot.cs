@@ -309,8 +309,11 @@ namespace Models.Migrations {
                 b.Property<DateTime>("DateTime")
                     .HasColumnType("datetime2");
 
-                b.Property<int?>("GuestId")
-                    .HasColumnType("int");
+                    b.Property<int>("DiscountApplied")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GuestId")
+                        .HasColumnType("int");
 
                 b.HasKey("Id");
 
@@ -334,11 +337,8 @@ namespace Models.Migrations {
                 b.Property<int>("BookingId")
                     .HasColumnType("int");
 
-                b.Property<double>("DiscountApplied")
-                    .HasColumnType("float");
-
-                b.Property<double>("PriceAtBooking")
-                    .HasColumnType("float");
+                    b.Property<double>("PriceAtBooking")
+                        .HasColumnType("float");
 
                 b.HasKey("Id");
 
@@ -375,16 +375,20 @@ namespace Models.Migrations {
                 b.Property<int>("AddressId")
                     .HasColumnType("int");
 
-                b.Property<string>("Name")
-                    .IsRequired()
-                    .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                 b.HasKey("Id");
 
                 b.HasIndex("AddressId");
 
-                b.ToTable("Guest");
-            });
+                    b.ToTable("Guests");
+                });
 
             modelBuilder.Entity("Account", b => {
                 b.HasOne("Models.Address", "Address")
