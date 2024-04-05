@@ -1,45 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using Models;
 
-namespace BeestjeOpJeFeestje.Controllers
-{
-    public class AnimalsController : Controller
-    {
+namespace BeestjeOpJeFeestje.Controllers {
+    [Authorize(Roles = "Admin")]
+    public class AnimalsController : Controller {
         private readonly ApplicationDbContext _context;
 
-        public AnimalsController(ApplicationDbContext context)
-        {
+        public AnimalsController(ApplicationDbContext context) {
             _context = context;
         }
 
         // GET: Animals
-        public async Task<IActionResult> Index()
-        {
+        public async Task<IActionResult> Index() {
             var applicationDbContext = _context.Animals.Include(a => a.AnimalType);
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Animals/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
+        public async Task<IActionResult> Details(int? id) {
+            if (id == null) {
                 return NotFound();
             }
 
             var animal = await _context.Animals
                 .Include(a => a.AnimalType)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (animal == null)
-            {
+            if (animal == null) {
                 return NotFound();
             }
 
@@ -47,8 +36,7 @@ namespace BeestjeOpJeFeestje.Controllers
         }
 
         // GET: Animals/Create
-        public IActionResult Create()
-        {
+        public IActionResult Create() {
             ViewData["AnimalTypeId"] = new SelectList(_context.AnimalTypes, "Id", "TypeName");
             return View();
         }
@@ -76,16 +64,13 @@ namespace BeestjeOpJeFeestje.Controllers
         }
 
         // GET: Animals/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
+        public async Task<IActionResult> Edit(int? id) {
+            if (id == null) {
                 return NotFound();
             }
 
             var animal = await _context.Animals.FindAsync(id);
-            if (animal == null)
-            {
+            if (animal == null) {
                 return NotFound();
             }
             ViewData["AnimalTypeId"] = new SelectList(_context.AnimalTypes, "Id", "TypeName", animal.AnimalTypeId);
@@ -129,18 +114,15 @@ namespace BeestjeOpJeFeestje.Controllers
 
 
         // GET: Animals/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
+        public async Task<IActionResult> Delete(int? id) {
+            if (id == null) {
                 return NotFound();
             }
 
             var animal = await _context.Animals
                 .Include(a => a.AnimalType)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (animal == null)
-            {
+            if (animal == null) {
                 return NotFound();
             }
 
@@ -150,11 +132,9 @@ namespace BeestjeOpJeFeestje.Controllers
         // POST: Animals/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
+        public async Task<IActionResult> DeleteConfirmed(int id) {
             var animal = await _context.Animals.FindAsync(id);
-            if (animal != null)
-            {
+            if (animal != null) {
                 _context.Animals.Remove(animal);
             }
 
@@ -162,8 +142,7 @@ namespace BeestjeOpJeFeestje.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AnimalExists(int id)
-        {
+        private bool AnimalExists(int id) {
             return _context.Animals.Any(e => e.Id == id);
         }
     }
