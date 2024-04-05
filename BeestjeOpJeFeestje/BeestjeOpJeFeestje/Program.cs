@@ -1,4 +1,6 @@
 using BeestjeOpJeFeestje.ViewModels;
+using BusinessLogic;
+using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -28,6 +30,7 @@ namespace BeestjeOpJeFeestje
                 .AddDefaultTokenProviders();
 
             builder.Services.AddScoped<IHtmlHelper<BookingViewModel>, HtmlHelper<BookingViewModel>>();
+            builder.Services.AddScoped<IBookingRules, BookingRules>();
 
             var app = builder.Build();
 
