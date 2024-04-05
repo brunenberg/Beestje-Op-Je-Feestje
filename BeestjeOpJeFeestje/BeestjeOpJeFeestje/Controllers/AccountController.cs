@@ -24,12 +24,11 @@ namespace BeestjeOpJeFeestje.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model) {
-            if(ModelState.IsValid) {
+            if (ModelState.IsValid) {
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if(result.Succeeded) {
+                if (result.Succeeded) {
                     return RedirectToAction("Index", "Home");
-                }
-                else {
+                } else {
                     ModelState.AddModelError(string.Empty, "Ongeldige login.");
                     return View(model);
                 }
@@ -54,7 +53,7 @@ namespace BeestjeOpJeFeestje.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateUser(CreateUserViewModel model) {
-            if(ModelState.IsValid) {
+            if (ModelState.IsValid) {
                 // Create a new Address instance
                 var address = new Address {
                     Street = model.Street,
@@ -82,7 +81,7 @@ namespace BeestjeOpJeFeestje.Controllers {
                 var result = await _userManager.CreateAsync(user, password);
                 await _userManager.AddToRoleAsync(user, "Customer");
 
-                if(result.Succeeded) {
+                if (result.Succeeded) {
                     // User created successfully
                     var userCreatedViewModel = new UserCreatedViewModel {
                         Email = user.Email,
@@ -92,7 +91,7 @@ namespace BeestjeOpJeFeestje.Controllers {
                     return View("UserCreated", userCreatedViewModel);
                 }
 
-                foreach(var error in result.Errors) {
+                foreach (var error in result.Errors) {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
@@ -111,7 +110,7 @@ namespace BeestjeOpJeFeestje.Controllers {
             // Ensure at least one alphanumeric character
             stringChars[0] = alphanumericChars[random.Next(alphanumericChars.Length)];
 
-            for(int i = 1; i < stringChars.Length; i++) {
+            for (int i = 1; i < stringChars.Length; i++) {
                 stringChars[i] = chars[random.Next(chars.Length)];
             }
 
@@ -143,7 +142,7 @@ namespace BeestjeOpJeFeestje.Controllers {
             var user = await _userManager.Users.Include(u => u.Address)
                                                .FirstOrDefaultAsync(u => u.Id == id);
 
-            if(user == null) {
+            if (user == null) {
                 return NotFound();
             }
 
@@ -167,11 +166,11 @@ namespace BeestjeOpJeFeestje.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditUser(EditUserViewModel model) {
-            if(ModelState.IsValid) {
+            if (ModelState.IsValid) {
                 var user = await _userManager.Users.Include(u => u.Address)
                                                    .FirstOrDefaultAsync(u => u.Id == model.Id);
 
-                if(user == null) {
+                if (user == null) {
                     return NotFound();
                 }
 
@@ -185,11 +184,11 @@ namespace BeestjeOpJeFeestje.Controllers {
 
                 var result = await _userManager.UpdateAsync(user);
 
-                if(result.Succeeded) {
+                if (result.Succeeded) {
                     return RedirectToAction(nameof(UserList));
                 }
 
-                foreach(var error in result.Errors) {
+                foreach (var error in result.Errors) {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
