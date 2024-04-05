@@ -10,10 +10,10 @@ namespace BeestjeOpJeFeestje.Controllers {
     public class BookingController : Controller {
 
         private readonly ApplicationDbContext _context;
-        private readonly IBookingRules _bookingRules;
+        private readonly ISelectionRules _bookingRules;
         private readonly IPricingRules _priceRules;
 
-        public BookingController(ApplicationDbContext context, IBookingRules bookingRules, IPricingRules pricingRules) {
+        public BookingController(ApplicationDbContext context, ISelectionRules bookingRules, IPricingRules pricingRules) {
             _context = context;
             _bookingRules = bookingRules;
             _priceRules = pricingRules;
