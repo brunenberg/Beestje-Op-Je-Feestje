@@ -32,21 +32,21 @@ namespace BusinessLogic {
                 return (false, "Je mag geen beestje boeken van het type 'Sneeuw' in de maanden juni t/m augustus.");
             }
 
-            if(customerCard.CardType.Equals("None") && selectedAnimals.Count > 3) {
+            if(customerCard == null && selectedAnimals.Count > 3) {
                 return (false, "Klanten zonder klantenkaart mogen maximaal 3 dieren boeken.");
             }
 
-            if(customerCard.CardType.Equals("Silver") && selectedAnimals.Count > 4) {
+            if(customerCard != null && customerCard.CardType.Equals("Silver") && selectedAnimals.Count > 4) {
                 return (false, "Klanten met een zilveren klantenkaart mogen maximaal 4 dieren boeken.");
             }
 
-            if(!customerCard.CardType.Equals("Platinum")) {
+            if(customerCard != null && !customerCard.CardType.Equals("Platinum")) {
                 if(selectedAnimals.Any(a => a.AnimalType.TypeName == "VIP")) {
                     return (false, "Alleen klanten met een platina klantenkaart kunnen VIP dieren boeken.");
                 }
             }
 
-            if(customerCard.CardType.Equals("Gold")) {
+            if(customerCard != null && customerCard.CardType.Equals("Gold")) {
                 return (true, null);
             }
 

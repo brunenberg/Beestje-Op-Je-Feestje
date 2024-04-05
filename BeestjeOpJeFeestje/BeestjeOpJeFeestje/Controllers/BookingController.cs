@@ -72,10 +72,6 @@ namespace BeestjeOpJeFeestje.Controllers
             } else {
                 customerCard = null;
             }
-
-            if(customerCard == null) {
-                customerCard = new CustomerCard { CardType = "None" };
-            }
             
             var validationResult = _bookingRules.ValidateAnimals(animals, customerCard, DateTime.Parse(HttpContext.Session.GetString("SelectedDate")));
 
