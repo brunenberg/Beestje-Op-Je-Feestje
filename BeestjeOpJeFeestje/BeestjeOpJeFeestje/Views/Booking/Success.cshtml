@@ -1,25 +1,16 @@
-﻿@model Models.Booking
+﻿@model BeestjeOpJeFeestje.ViewModels.BookingViewModel
 
 <h1>Boeking bevestiging</h1>
 <p>Uw boeking is succesvol ontvangen. Dit zijn de details van uw boeking.</p>
 
-<p>Datum: @Model.DateTime.ToString("dd-MM-yyyy")</p>
+<p>Datum: @Model.SelectedDate</p>
 <p>Beestjes geboekt:</p>
 <ul>
-    @foreach (var animal in Model.AnimalBookings)
+    @foreach (var animal in Model.Booking.AnimalBookings)
     {
         <li>@animal.Animal.Name - €@animal.Animal.Price</li>
     }
 </ul>
 
-@{
-        var totalPrice = Model.AnimalBookings.Sum(ab => ab.Animal.Price);
-        if (Model.DiscountApplied > 0)
-        {
-            totalPrice = totalPrice - (totalPrice * Model.DiscountApplied / 100);
-        }
-
-}
-
-<p>Ontvangen korting: @Model.DiscountApplied%</p>
-<p>Totaalprijs: €@totalPrice</p>
+<p>Ontvangen korting: @Model.Booking.DiscountApplied%</p>
+<p>Totaalprijs: €@Model.TotalPrice</p>

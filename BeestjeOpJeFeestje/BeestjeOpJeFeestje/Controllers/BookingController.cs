@@ -22,15 +22,30 @@ namespace BeestjeOpJeFeestje.Controllers
 
         [Authorize(Roles = "Customer")]
         public IActionResult Index() {
-            // Get all bookings which the user has made
             List<Booking> bookings = _context.Bookings
                 .Include(b => b.AnimalBookings)
                 .ThenInclude(bd => bd.Animal)
                 .Where(b => b.AccountId == _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name).Id)
                 .ToList();
 
-            return View(bookings);
+            List<BookingViewModel> viewModels = new List<BookingViewModel>();
+
+            foreach(Booking booking in bookings) {
+                var TotalPrice = booking.AnimalBookings.Sum(bd => bd.PriceAtBooking);
+                TotalPrice = TotalPrice * (1 - booking.DiscountApplied / 100.0);
+
+                BookingViewModel viewModel = new BookingViewModel {
+                    Booking = booking,
+                    SelectedDate = booking.DateTime.ToString("dd-MM-yyyy"),
+                    TotalPrice = TotalPrice,
+                };
+
+                viewModels.Add(viewModel);
+            }
+
+            return View(viewModels);
         }
+
 
         public IActionResult Start(DateTime? selectedDate) {
             if(selectedDate.HasValue) {
@@ -296,13 +311,21 @@ namespace BeestjeOpJeFeestje.Controllers
         }
 
         public IActionResult Success(Booking booking) {
-            // Include the animals in the booking
             booking = _context.Bookings
                 .Include(b => b.AnimalBookings)
                 .ThenInclude(bd => bd.Animal)
                 .FirstOrDefault(b => b.Id == booking.Id);
 
-            return View(booking);
+            var TotalPrice = booking.AnimalBookings.Sum(bd => bd.PriceAtBooking);
+            TotalPrice = TotalPrice * (1 - booking.DiscountApplied / 100.0);
+
+            BookingViewModel viewModel = new BookingViewModel {
+                Booking = booking,
+                SelectedDate = booking.DateTime.ToString("dd-MM-yyyy"),
+                TotalPrice = TotalPrice,
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Cancel(int id) {

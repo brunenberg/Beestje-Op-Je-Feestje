@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Models.Booking>
+﻿@model List<BeestjeOpJeFeestje.ViewModels.BookingViewModel>
 
 @{
     ViewData["Title"] = "Mijn boekingen";
@@ -13,23 +13,26 @@
                 <th>Datum</th>
                 <th>Dieren</th>
                 <th>Korting</th>
+                <th>Totaalprijs</th>
                 <th>Acties</th>
             </tr>
         </thead>
         <tbody>
-            @foreach(var booking in Model) {
+            @foreach(var viewModel in Model) {
                 <tr>
-                    <td>@booking.DateTime.ToString("yyyy-MM-dd")</td>
+                    <td>@viewModel.Booking.DateTime.ToString("yyyy-MM-dd")</td>
                     <td>
                         <ul>
-                            @foreach(var animalBooking in booking.AnimalBookings) {
+                            @foreach(var animalBooking in viewModel.Booking.AnimalBookings) {
                                 <li>@animalBooking.Animal.Name</li>
                             }
                         </ul>
                     </td>
-                    <td>@booking.DiscountApplied%</td>
+                    <td></td>
+                    <td>@viewModel.Booking.DiscountApplied%</td>
+                    <td>€@viewModel.TotalPrice</td>
                     <td>
-                        <a href="@Url.Action("Cancel", "Booking", new { id = booking.Id })" class="btn btn-danger">Annuleer boeking</a>
+                        <a href="@Url.Action("Cancel", "Booking", new { id = viewModel.Booking.Id })" class="btn btn-danger">Annuleer boeking</a>
                     </td>
                 </tr>
             }
