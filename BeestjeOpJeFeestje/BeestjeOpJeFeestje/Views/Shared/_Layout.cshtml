@@ -32,9 +32,16 @@
                             </li>
                         }
                         @{
+                            if(User.IsInRole("Customer")) {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Booking" asp-action="Index">Mijn boekingen</a>
+                                </li>
+                            }
+                        }
+                        @{
                             if (User.Identity.IsAuthenticated) {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Uitloggen</a>
                                 </li>
                             } else {
                                 <li class="nav-item">
@@ -42,6 +49,7 @@
                                 </li>
                             }
                         }
+                        
 
                     </ul>
                 </div>

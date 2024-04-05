@@ -1,6 +1,8 @@
 ﻿using BeestjeOpJeFeestje.ViewModels;
 using BusinessLogic;
 using BusinessLogic.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -18,6 +20,34 @@ namespace BeestjeOpJeFeestje.Controllers {
             _bookingRules = bookingRules;
             _priceRules = pricingRules;
         }
+
+        [Authorize(Roles = "Customer")]
+        public IActionResult Index() {
+            List<Booking> bookings = _context.Bookings
+                .Include(b => b.AnimalBookings)
+                .ThenInclude(bd => bd.Animal)
+                .Where(b => b.AccountId == _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name).Id)
+                .ToList();
+
+            List<BookingViewModel> viewModels = new List<BookingViewModel>();
+
+            foreach(Booking booking in bookings) {
+                var TotalPrice = booking.AnimalBookings.Sum(bd => bd.PriceAtBooking);
+                TotalPrice = TotalPrice * (1 - booking.DiscountApplied / 100.0);
+
+                BookingViewModel viewModel = new BookingViewModel {
+                    Booking = booking,
+                    SelectedDate = booking.DateTime.ToString("dd-MM-yyyy"),
+                    TotalPrice = TotalPrice,
+                };
+
+                viewModels.Add(viewModel);
+            }
+
+            return View(viewModels);
+        }
+
+
         public IActionResult Start(DateTime? selectedDate) {
             if (selectedDate.HasValue) {
                 if (selectedDate.Value < DateTime.Today) {
@@ -245,7 +275,44 @@ namespace BeestjeOpJeFeestje.Controllers {
 
             HttpContext.Session.Clear();
 
-            return View("Success");
+            return RedirectToAction("Success", booking);
+        }
+
+        public IActionResult Success(Booking booking) {
+            booking = _context.Bookings
+                .Include(b => b.AnimalBookings)
+                .ThenInclude(bd => bd.Animal)
+                .FirstOrDefault(b => b.Id == booking.Id);
+
+            var TotalPrice = booking.AnimalBookings.Sum(bd => bd.PriceAtBooking);
+            TotalPrice = TotalPrice * (1 - booking.DiscountApplied / 100.0);
+
+            BookingViewModel viewModel = new BookingViewModel {
+                Booking = booking,
+                SelectedDate = booking.DateTime.ToString("dd-MM-yyyy"),
+                TotalPrice = TotalPrice,
+            };
+
+            return View(viewModel);
+        }
+
+        public IActionResult Cancel(int id) {
+            Booking booking = _context.Bookings
+                .Include(b => b.AnimalBookings)
+                .FirstOrDefault(b => b.Id == id);
+
+            if(booking == null) {
+                return NotFound();
+            }
+
+            if(booking.AccountId != _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name).Id) {
+                return Unauthorized();
+            }
+
+            _context.Bookings.Remove(booking);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
 

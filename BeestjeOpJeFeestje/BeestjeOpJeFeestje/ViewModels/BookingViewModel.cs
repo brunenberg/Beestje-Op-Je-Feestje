@@ -16,5 +16,6 @@ namespace BeestjeOpJeFeestje.ViewModels
         public string City { get; set; }
         public double TotalPrice { get; set; }
         public List<string> AppliedDiscounts { get; set; }
+        public Booking? Booking { get; set; }
     }
 }

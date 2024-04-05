@@ -1,1 +1,16 @@
-﻿<p>Gelukt!</p>
+﻿@model BeestjeOpJeFeestje.ViewModels.BookingViewModel
+
+<h1>Boeking bevestiging</h1>
+<p>Uw boeking is succesvol ontvangen. Dit zijn de details van uw boeking.</p>
+
+<p>Datum: @Model.SelectedDate</p>
+<p>Beestjes geboekt:</p>
+<ul>
+    @foreach (var animal in Model.Booking.AnimalBookings)
+    {
+        <li>@animal.Animal.Name - €@animal.Animal.Price</li>
+    }
+</ul>
+
+<p>Ontvangen korting: @Model.Booking.DiscountApplied%</p>
+<p>Totaalprijs: €@Model.TotalPrice</p>
