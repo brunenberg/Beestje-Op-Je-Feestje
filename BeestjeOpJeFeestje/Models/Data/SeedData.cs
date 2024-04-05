@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
-using Models;
 
 public static class SeedData {
     public static async Task Initialize(IServiceProvider serviceProvider, UserManager<Account> userManager, RoleManager<IdentityRole> roleManager) {
