@@ -11,8 +11,8 @@ namespace BusinessLogic {
             return totalPrice;
         }
 
-        public (double, List<string>) CalculateDiscount(List<Animal> selectedAnimals, CustomerCard customerCard, DateTime bookingDate) {
-            double discountPercentage = 0;
+        public (int, List<string>) CalculateDiscount(List<Animal> selectedAnimals, CustomerCard customerCard, DateTime bookingDate) {
+            int discountPercentage = 0;
             List<string> appliedDiscounts = new List<string>();
 
             IEnumerable<IGrouping<int, Animal>> animalGroups = selectedAnimals.GroupBy(a => a.AnimalTypeId);
