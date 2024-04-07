@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using System.Security.Claims;
 
 namespace BeestjeOpJeFeestje.Controllers {
     [Authorize(Policy = "RequireAdminClaim")]
@@ -84,7 +85,8 @@ namespace BeestjeOpJeFeestje.Controllers {
                 await _userManager.AddToRoleAsync(user, "Customer");
 
                 if (result.Succeeded) {
-                    // User created successfully
+                    await _userManager.AddClaimAsync(user, new Claim("Customer", "true"));
+
                     var userCreatedViewModel = new UserCreatedViewModel {
                         Email = user.Email,
                         Password = password
