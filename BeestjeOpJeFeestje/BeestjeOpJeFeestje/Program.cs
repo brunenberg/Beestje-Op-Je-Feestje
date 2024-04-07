@@ -1,6 +1,6 @@
 using BeestjeOpJeFeestje.Models;
-using BusinessLogic;
 using BusinessLogic.Interfaces;
+using BusinessLogic.RuleGroups;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -35,10 +35,6 @@ namespace BeestjeOpJeFeestje
             builder.Services.AddIdentity<Account, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
-            builder.Services.AddScoped<IHtmlHelper<BookingViewModel>, HtmlHelper<BookingViewModel>>();
-            builder.Services.AddScoped<ISelectionRules, SelectionRules>();
-            builder.Services.AddScoped<IPricingRules, PricingRules>();
 
             var app = builder.Build();
 
