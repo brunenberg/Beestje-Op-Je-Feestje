@@ -29,10 +29,6 @@ namespace BeestjeOpJeFeestje
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            builder.Services.AddScoped<IHtmlHelper<BookingViewModel>, HtmlHelper<BookingViewModel>>();
-            builder.Services.AddScoped<ISelectionRules, SelectionRules>();
-            builder.Services.AddScoped<IPricingRules, PricingRules>();
-
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

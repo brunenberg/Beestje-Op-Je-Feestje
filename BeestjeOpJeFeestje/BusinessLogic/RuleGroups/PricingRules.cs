@@ -1,13 +1,17 @@
 ﻿using BusinessLogic.Interfaces;
 using BusinessLogic.Rules.PricingRules;
 using Models;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography;
 
 namespace BusinessLogic.RuleGroups
 {
     public class PricingRules : IPricingRules
     {
+        private readonly List<IDiscountRule> _discountRules;
+
+        public PricingRules(List<IDiscountRule> discountRules) {
+            _discountRules = discountRules;
+        }
+
         public double CalculateAnimalsPrice(List<Animal> animals)
         {
             double totalPrice = 0;
@@ -28,20 +32,10 @@ namespace BusinessLogic.RuleGroups
                 BookingDate = bookingDate,
                 DiscountPercentage = discountPercentage
             };
-
-            List<IDiscountRule> discountRules = new List<IDiscountRule>
-            {
-                new TypeGroupDiscountRule(),
-                new DuckDiscountRule(new ConcreteRandomNumberGenerator()),
-                new DayDiscountRule(),
-                new NameDiscountRule(),
-                new CustomerCardDiscountRule(),
-        };
-
             
             List<string> appliedDiscounts = new List<string>();
 
-            foreach (IDiscountRule rule in discountRules) {
+            foreach (IDiscountRule rule in _discountRules) {
                 (int discountPercentage, List<string> discountMessages) result = rule.GetDiscount(context);
                 context.DiscountPercentage += result.discountPercentage;
                 if (result.discountMessages != null) {

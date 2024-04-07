@@ -1,6 +1,9 @@
 ﻿using BeestjeOpJeFeestje.Models;
 using BusinessLogic;
 using BusinessLogic.Interfaces;
+using BusinessLogic.RuleGroups;
+using BusinessLogic.Rules.PricingRules;
+using BusinessLogic.Rules.SelectionRules;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,13 +16,28 @@ namespace BeestjeOpJeFeestje.Controllers
     public class BookingController : Controller {
 
         private readonly ApplicationDbContext _context;
-        private readonly ISelectionRules _bookingRules;
+        private readonly ISelectionRules _selectionRules;
         private readonly IPricingRules _priceRules;
 
-        public BookingController(ApplicationDbContext context, ISelectionRules bookingRules, IPricingRules pricingRules) {
+        public BookingController(ApplicationDbContext context) {
             _context = context;
-            _bookingRules = bookingRules;
-            _priceRules = pricingRules;
+            List<IValidationRule> validationRules = new List<IValidationRule>
+            {
+                new AnimalCountValidationRule(),
+                new AnimalTypeValidationRule(),
+                new BookingDayValidationRule(),
+                new BookingMonthValidationRule(),
+                new CustomerCardValidationRule()
+            };
+            _selectionRules = new SelectionRules(validationRules);
+            List<IDiscountRule> discountRules = new List<IDiscountRule> {
+                new TypeGroupDiscountRule(),
+                new DuckDiscountRule(new ConcreteRandomNumberGenerator()),
+                new DayDiscountRule(),
+                new NameDiscountRule(),
+                new CustomerCardDiscountRule(),
+            };
+            _priceRules = new PricingRules(discountRules);
         }
 
         [Authorize(Roles = "Customer")]
@@ -102,7 +120,7 @@ namespace BeestjeOpJeFeestje.Controllers
                 customerCard = null;
             }
 
-            var validationResult = _bookingRules.ValidateAnimals(animals, customerCard, DateTime.Parse(HttpContext.Session.GetString("SelectedDate")));
+            var validationResult = _selectionRules.ValidateAnimals(animals, customerCard, DateTime.Parse(HttpContext.Session.GetString("SelectedDate")));
 
             if (!validationResult.isValid) {
                 TempData["ErrorMessage"] = validationResult.errorMessage;

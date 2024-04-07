@@ -1,11 +1,15 @@
 ﻿using BusinessLogic.Interfaces;
-using BusinessLogic.Rules.SelectionRules;
 using Models;
 
 namespace BusinessLogic.RuleGroups
 {
     public class SelectionRules : ISelectionRules
     {
+        private readonly List<IValidationRule> _selectionRules;
+
+        public SelectionRules(List<IValidationRule> selectionRules) {
+            _selectionRules = selectionRules;
+        }
 
         public (bool isValid, string errorMessage) ValidateAnimals(List<Animal> selectedAnimals, CustomerCard customerCard, DateTime bookingDate)
         {
@@ -16,16 +20,7 @@ namespace BusinessLogic.RuleGroups
                 BookingDate = bookingDate
             };
 
-            List<IValidationRule> validationRules = new List<IValidationRule>
-            {
-                new AnimalCountValidationRule(),
-                new AnimalTypeValidationRule(),
-                new BookingDayValidationRule(),
-                new BookingMonthValidationRule(),
-                new CustomerCardValidationRule()
-            };
-
-            foreach (IValidationRule rule in validationRules)
+            foreach (IValidationRule rule in _selectionRules)
             {
                 (bool isValid, string errorMessage) result = rule.Validate(context);
                 if (!result.isValid) return result;
