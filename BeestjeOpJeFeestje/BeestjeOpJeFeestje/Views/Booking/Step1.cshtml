@@ -34,7 +34,7 @@
                     <div class="animal-card">
                         <img src="@Url.Content(animal.ImagePath)" class="animal-image" />
                         <div class="animal-details">
-                            <h2>@animal.Name</h2>
+                            <h2>@animal.Name - €@animal.Price</h2>
                             <input type="checkbox" name="selectedAnimals" value="@animal.Id" id="animal-@animal.Id" />
                             <label for="animal-@animal.Id">Selecteer</label>
                         </div>
