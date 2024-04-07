@@ -24,6 +24,20 @@
 <h4>Stap 2 - Vul je contactgegevens in</h4>
 <div class="d-flex">
     <div class="booking-container box">
+        @{
+
+            @if(TempData["Errors"] != null) {
+                <div class="alert alert-danger">
+                    <h4>Validatie fouten</h4>
+                    <ul>
+                        @foreach(var error in (string[])TempData["Errors"]) {
+                            <li>@error</li>
+                        }
+                    </ul>
+                </div>
+                TempData["Errors"] = null;
+            }
+        }
         <form asp-controller="Booking" asp-action="Step3" method="POST">
             <div class="form-group">
                 <label for="name">Naam:</label>
