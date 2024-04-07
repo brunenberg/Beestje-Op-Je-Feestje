@@ -18,6 +18,11 @@ namespace BeestjeOpJeFeestje
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
             });
 
+            builder.Services.AddAuthorization(options => {
+                options.AddPolicy("RequireAdminClaim", policy => policy.RequireClaim("Admin"));
+                options.AddPolicy("RequireCustomerClaim", policy => policy.RequireClaim("Customer"));
+            });
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
