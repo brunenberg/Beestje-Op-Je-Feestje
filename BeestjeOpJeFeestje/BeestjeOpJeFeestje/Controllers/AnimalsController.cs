@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace BeestjeOpJeFeestje.Controllers {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "RequireAdminClaim")]
+    [Authorize(Policy = "RequireAdminRole")]
     public class AnimalsController : Controller {
         private readonly ApplicationDbContext _context;
 
