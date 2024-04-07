@@ -1,4 +1,4 @@
-﻿using BeestjeOpJeFeestje.ViewModels;
+﻿using BeestjeOpJeFeestje.Models;
 using BusinessLogic;
 using BusinessLogic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 
 
-namespace BeestjeOpJeFeestje.Controllers {
+namespace BeestjeOpJeFeestje.Controllers
+{
     public class BookingController : Controller {
 
         private readonly ApplicationDbContext _context;

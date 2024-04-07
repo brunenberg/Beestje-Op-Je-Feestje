@@ -1,6 +1,6 @@
 ﻿using Models;
 
-namespace BeestjeOpJeFeestje.ViewModels
+namespace BeestjeOpJeFeestje.Models
 {
     public class BookingViewModel
     {
