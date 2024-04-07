@@ -22,7 +22,8 @@ namespace BeestjeOpJeFeestje.Controllers
             _priceRules = pricingRules;
         }
 
-        [Authorize(Roles = "Customer")]
+        [Authorize(Policy = "RequireCustomerClaim")]
+        [Authorize(Policy = "RequireCustomerRole")]
         public IActionResult Index() {
             List<Booking> bookings = _context.Bookings
                 .Include(b => b.AnimalBookings)

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Models;
+using System.Security.Claims;
 
 public static class SeedData {
     public static async Task Initialize(IServiceProvider serviceProvider, UserManager<Account> userManager, RoleManager<IdentityRole> roleManager) {
@@ -49,11 +50,20 @@ public static class SeedData {
             var customerUser = new Account { UserName = "customer@test.com", Email = "customer@test.com", Name = "Customer User", AddressId = address1.Id };
             var adminUser = new Account { UserName = "admin@test.com", Email = "admin@test.com", Name = "Admin User", AddressId = address2.Id };
 
-            await userManager.CreateAsync(customerUser, "Test@123");
-            await userManager.CreateAsync(adminUser, "Test@123");
+            var resultCustomer = await userManager.CreateAsync(customerUser, "Test@123");
+            var resultAdmin = await userManager.CreateAsync(adminUser, "Test@123");
+
+            if(resultAdmin.Succeeded) {
+                await userManager.AddClaimAsync(adminUser, new Claim("Admin", "true"));
+            }
+            if(resultCustomer.Succeeded) {
+                await userManager.AddClaimAsync(customerUser, new Claim("Customer", "true"));
+            }
 
             await userManager.AddToRoleAsync(customerUser, "Customer");
             await userManager.AddToRoleAsync(adminUser, "Admin");
+
+            
 
 
             // Type: Jungle - Aap, Olifant, Zebra, Leeuw

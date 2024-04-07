@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using System.Security.Claims;
 
 namespace BeestjeOpJeFeestje.Controllers {
+    [Authorize(Policy = "RequireAdminClaim")]
+    [Authorize(Policy = "RequireAdminRole")]
     public class AccountController : Controller {
         private readonly UserManager<Account> _userManager;
         private readonly SignInManager<Account> _signInManager;
@@ -16,11 +19,13 @@ namespace BeestjeOpJeFeestje.Controllers {
             _context = context;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Login() {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model) {
@@ -40,12 +45,12 @@ namespace BeestjeOpJeFeestje.Controllers {
             return View(model);
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Logout() {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult CreateUser() {
             var cardTypes = _context.CustomerCards.ToList();
@@ -53,7 +58,6 @@ namespace BeestjeOpJeFeestje.Controllers {
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateUser(CreateUserViewModel model) {
@@ -86,7 +90,8 @@ namespace BeestjeOpJeFeestje.Controllers {
                 await _userManager.AddToRoleAsync(user, "Customer");
 
                 if (result.Succeeded) {
-                    // User created successfully
+                    await _userManager.AddClaimAsync(user, new Claim("Customer", "true"));
+
                     var userCreatedViewModel = new UserCreatedViewModel {
                         Email = user.Email,
                         Password = password
@@ -121,7 +126,6 @@ namespace BeestjeOpJeFeestje.Controllers {
             return new string(stringChars);
         }
 
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UserList() {
             var users = await _userManager.Users
             .Include(u => u.Address)
@@ -140,7 +144,6 @@ namespace BeestjeOpJeFeestje.Controllers {
             return View(userViewModels);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> EditUser(string id) {
             var user = await _userManager.Users.Include(u => u.Address)
@@ -166,7 +169,6 @@ namespace BeestjeOpJeFeestje.Controllers {
             return View(viewModel);
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditUser(EditUserViewModel model) {
