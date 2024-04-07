@@ -23,6 +23,7 @@ namespace BeestjeOpJeFeestje.Controllers
         }
 
         [Authorize(Policy = "RequireCustomerClaim")]
+        [Authorize(Policy = "RequireCustomerRole")]
         public IActionResult Index() {
             List<Booking> bookings = _context.Bookings
                 .Include(b => b.AnimalBookings)

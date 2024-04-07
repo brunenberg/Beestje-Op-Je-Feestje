@@ -6,6 +6,7 @@ using Models;
 
 namespace BeestjeOpJeFeestje.Controllers {
     [Authorize(Policy = "RequireAdminClaim")]
+    [Authorize(Policy = "RequireAdminRole")]
     public class AccountController : Controller {
         private readonly UserManager<Account> _userManager;
         private readonly SignInManager<Account> _signInManager;

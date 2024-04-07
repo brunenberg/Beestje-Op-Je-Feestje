@@ -21,6 +21,8 @@ namespace BeestjeOpJeFeestje
             builder.Services.AddAuthorization(options => {
                 options.AddPolicy("RequireAdminClaim", policy => policy.RequireClaim("Admin"));
                 options.AddPolicy("RequireCustomerClaim", policy => policy.RequireClaim("Customer"));
+                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("RequireCustomerRole", policy => policy.RequireRole("Customer"));
             });
 
             // Add services to the container.

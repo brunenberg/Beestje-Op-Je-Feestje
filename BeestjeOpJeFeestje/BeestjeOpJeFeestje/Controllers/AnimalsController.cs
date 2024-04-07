@@ -6,6 +6,7 @@ using Models;
 
 namespace BeestjeOpJeFeestje.Controllers {
     [Authorize(Policy = "RequireAdminClaim")]
+    [Authorize(Policy = "RequireAdminRole")]
     public class AnimalsController : Controller {
         private readonly ApplicationDbContext _context;
 
