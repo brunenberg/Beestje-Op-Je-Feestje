@@ -1,19 +1,26 @@
 ﻿using BusinessLogic.Rules.PricingRules;
 using BusinessLogic;
 using Models;
+using System.Diagnostics.CodeAnalysis;
 
-namespace UnitTests {
-    public class CustomerCardDiscountRuleTests {
+namespace UnitTests.BusinessRules
+{
+    [ExcludeFromCodeCoverage]
+    public class CustomerCardDiscountRuleTests
+    {
         private CustomerCardDiscountRule _rule;
 
-        public CustomerCardDiscountRuleTests() {
+        public CustomerCardDiscountRuleTests()
+        {
             _rule = new CustomerCardDiscountRule();
         }
 
         [Fact]
-        public void GetDiscount_CustomerCardExists_ReturnsDiscount() {
+        public void GetDiscount_CustomerCardExists_ReturnsDiscount()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 CustomerCard = new CustomerCard { CardType = "Gold" }
             };
 
@@ -27,9 +34,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void GetDiscount_NoCustomerCard_ReturnsNoDiscount() {
+        public void GetDiscount_NoCustomerCard_ReturnsNoDiscount()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 CustomerCard = null
             };
 
@@ -42,17 +51,21 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void GetDiscount_CustomerCardExistsDifferentTypes_ReturnsSameDiscount() {
+        public void GetDiscount_CustomerCardExistsDifferentTypes_ReturnsSameDiscount()
+        {
             // Arrange
-            var contextGold = new DiscountContext {
+            var contextGold = new DiscountContext
+            {
                 CustomerCard = new CustomerCard { CardType = "Gold" }
             };
 
-            var contextSilver = new DiscountContext {
+            var contextSilver = new DiscountContext
+            {
                 CustomerCard = new CustomerCard { CardType = "Silver" }
             };
 
-            var contextPlatinum = new DiscountContext {
+            var contextPlatinum = new DiscountContext
+            {
                 CustomerCard = new CustomerCard { CardType = "Platinum" }
             };
 
@@ -68,9 +81,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void GetDiscount_CustomerCardExistsButEmpty_ReturnsDiscount() {
+        public void GetDiscount_CustomerCardExistsButEmpty_ReturnsDiscount()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 CustomerCard = new CustomerCard { CardType = "" }
             };
 
@@ -84,9 +99,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void GetDiscount_CustomerCardExistsButNullType_ReturnsDiscount() {
+        public void GetDiscount_CustomerCardExistsButNullType_ReturnsDiscount()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 CustomerCard = new CustomerCard { CardType = null }
             };
 

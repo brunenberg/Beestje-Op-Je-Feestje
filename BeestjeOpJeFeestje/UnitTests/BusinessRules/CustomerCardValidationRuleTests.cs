@@ -1,19 +1,26 @@
 ﻿using BusinessLogic;
 using BusinessLogic.Rules.SelectionRules;
 using Models;
+using System.Diagnostics.CodeAnalysis;
 
-namespace UnitTests {
-    public class CustomerCardValidationRuleTests {
+namespace UnitTests.BusinessRules
+{
+    [ExcludeFromCodeCoverage]
+    public class CustomerCardValidationRuleTests
+    {
         private CustomerCardValidationRule _rule;
 
-        public CustomerCardValidationRuleTests() {
+        public CustomerCardValidationRuleTests()
+        {
             _rule = new CustomerCardValidationRule();
         }
 
         [Fact]
-        public void Validate_NoCustomerCardAndMoreThanThreeAnimals_ReturnsFalse() {
+        public void Validate_NoCustomerCardAndMoreThanThreeAnimals_ReturnsFalse()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Aap", Price = 20, ImagePath = "~/images/aap.jpg", AnimalType = new AnimalType { TypeName = "Jungle" } },
@@ -34,9 +41,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void Validate_SilverCustomerCardAndMoreThanFourAnimals_ReturnsFalse() {
+        public void Validate_SilverCustomerCardAndMoreThanFourAnimals_ReturnsFalse()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Aap", Price = 20, ImagePath = "~/images/aap.jpg", AnimalType = new AnimalType { TypeName = "Jungle" } },
@@ -58,9 +67,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void Validate_GoldCustomerCardAndVIPAnimal_ReturnsFalse() {
+        public void Validate_GoldCustomerCardAndVIPAnimal_ReturnsFalse()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Panda", Price = 100, ImagePath = "~/images/panda.jpg", AnimalType = new AnimalType { TypeName = "VIP" } }
@@ -78,9 +89,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void Validate_PlatinumCustomerCardAndVIPAnimal_ReturnsTrue() {
+        public void Validate_PlatinumCustomerCardAndVIPAnimal_ReturnsTrue()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Panda", Price = 100, ImagePath = "~/images/panda.jpg", AnimalType = new AnimalType { TypeName = "VIP" } }
@@ -98,9 +111,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void Validate_NoCustomerCardAndThreeAnimals_ReturnsTrue() {
+        public void Validate_NoCustomerCardAndThreeAnimals_ReturnsTrue()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                 new Animal { Name = "Aap", Price = 20, ImagePath = "~/images/aap.jpg", AnimalType = new AnimalType { TypeName = "Jungle" } },
@@ -120,9 +135,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void Validate_SilverCustomerCardAndFourAnimals_ReturnsTrue() {
+        public void Validate_SilverCustomerCardAndFourAnimals_ReturnsTrue()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                 new Animal { Name = "Aap", Price = 20, ImagePath = "~/images/aap.jpg", AnimalType = new AnimalType { TypeName = "Jungle" } },
@@ -143,9 +160,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void Validate_GoldCustomerCardAndNonVIPAnimal_ReturnsTrue() {
+        public void Validate_GoldCustomerCardAndNonVIPAnimal_ReturnsTrue()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                 new Animal { Name = "Aap", Price = 20, ImagePath = "~/images/aap.jpg", AnimalType = new AnimalType { TypeName = "Jungle" } }

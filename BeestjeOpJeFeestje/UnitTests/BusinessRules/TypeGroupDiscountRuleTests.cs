@@ -1,19 +1,26 @@
 ﻿using BusinessLogic.Rules.PricingRules;
 using BusinessLogic;
 using Models;
+using System.Diagnostics.CodeAnalysis;
 
-namespace UnitTests {
-    public class TypeGroupDiscountRuleTests {
+namespace UnitTests.BusinessRules
+{
+    [ExcludeFromCodeCoverage]
+    public class TypeGroupDiscountRuleTests
+    {
         private TypeGroupDiscountRule _rule;
 
-        public TypeGroupDiscountRuleTests() {
+        public TypeGroupDiscountRuleTests()
+        {
             _rule = new TypeGroupDiscountRule();
         }
 
         [Fact]
-        public void GetDiscount_NoTypeGroup_ReturnsZero() {
+        public void GetDiscount_NoTypeGroup_ReturnsZero()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Aap", Price = 20, AnimalTypeId = 1 },
@@ -31,9 +38,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void GetDiscount_TypeGroupExists_ReturnsDiscount() {
+        public void GetDiscount_TypeGroupExists_ReturnsDiscount()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Aap", Price = 20, AnimalTypeId = 1 },
@@ -52,9 +61,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void GetDiscount_MultipleTypeGroupsExists_ReturnsSingleDiscount() {
+        public void GetDiscount_MultipleTypeGroupsExists_ReturnsSingleDiscount()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Aap", Price = 20, AnimalTypeId = 1 },

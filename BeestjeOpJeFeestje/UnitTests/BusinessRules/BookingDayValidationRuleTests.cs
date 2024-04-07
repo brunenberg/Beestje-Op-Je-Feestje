@@ -1,19 +1,26 @@
 ﻿using BusinessLogic;
 using BusinessLogic.Rules.SelectionRules;
 using Models;
+using System.Diagnostics.CodeAnalysis;
 
-namespace UnitTests {
-    public class BookingDayValidationRuleTests {
+namespace UnitTests.BusinessRules
+{
+    [ExcludeFromCodeCoverage]
+    public class BookingDayValidationRuleTests
+    {
         private BookingDayValidationRule _rule;
 
-        public BookingDayValidationRuleTests() {
+        public BookingDayValidationRuleTests()
+        {
             _rule = new BookingDayValidationRule();
         }
 
         [Fact]
-        public void Validate_PinguinOnWeekend_ReturnsFalse() {
+        public void Validate_PinguinOnWeekend_ReturnsFalse()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Pinguïn", Price = 20, ImagePath = "~/images/pinguin.jpg", AnimalType = new AnimalType { TypeName = "Vogel" } }
@@ -31,9 +38,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void Validate_PinguinOnWeekday_ReturnsTrue() {
+        public void Validate_PinguinOnWeekday_ReturnsTrue()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Pinguïn", Price = 20, ImagePath = "~/images/pinguin.jpg", AnimalType = new AnimalType { TypeName = "Vogel" } }

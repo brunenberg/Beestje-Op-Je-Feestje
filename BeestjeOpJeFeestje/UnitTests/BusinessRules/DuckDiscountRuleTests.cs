@@ -2,21 +2,28 @@
 using BusinessLogic;
 using Models;
 using Moq;
+using System.Diagnostics.CodeAnalysis;
 
-namespace UnitTests {
-    public class DuckDiscountRuleTests {
+namespace UnitTests.BusinessRules
+{
+    [ExcludeFromCodeCoverage]
+    public class DuckDiscountRuleTests
+    {
         private DuckDiscountRule _rule;
         private Mock<IRandomNumberGenerator> _mockRandomNumberGenerator;
 
-        public DuckDiscountRuleTests() {
+        public DuckDiscountRuleTests()
+        {
             _mockRandomNumberGenerator = new Mock<IRandomNumberGenerator>();
             _rule = new DuckDiscountRule(_mockRandomNumberGenerator.Object);
         }
 
         [Fact]
-        public void GetDiscount_DuckSelectedAndRandomNumberIsOne_ReturnsDiscount() {
+        public void GetDiscount_DuckSelectedAndRandomNumberIsOne_ReturnsDiscount()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Eend", Price = 20 },
@@ -34,9 +41,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void GetDiscount_DuckSelectedAndRandomNumberIsNotOne_ReturnsNoDiscount() {
+        public void GetDiscount_DuckSelectedAndRandomNumberIsNotOne_ReturnsNoDiscount()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Eend", Price = 20 },
@@ -53,9 +62,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void GetDiscount_NoDuckSelected_ReturnsNoDiscount() {
+        public void GetDiscount_NoDuckSelected_ReturnsNoDiscount()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Aap", Price = 20 },

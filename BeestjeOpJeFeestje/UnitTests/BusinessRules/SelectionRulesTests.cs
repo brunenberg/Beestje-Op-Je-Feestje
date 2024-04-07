@@ -2,19 +2,25 @@
 using BusinessLogic.RuleGroups;
 using Models;
 using Moq;
+using System.Diagnostics.CodeAnalysis;
 
-namespace UnitTests {
-    public class SelectionRulesTests {
+namespace UnitTests.BusinessRules
+{
+    [ExcludeFromCodeCoverage]
+    public class SelectionRulesTests
+    {
         private SelectionRules _rules;
         private Mock<IValidationRule> _mockValidationRule;
 
-        public SelectionRulesTests() {
+        public SelectionRulesTests()
+        {
             _mockValidationRule = new Mock<IValidationRule>();
             _rules = new SelectionRules(new List<IValidationRule> { _mockValidationRule.Object });
         }
 
         [Fact]
-        public void ValidateAnimals_GivenValidationRule_ReturnsExpectedResult() {
+        public void ValidateAnimals_GivenValidationRule_ReturnsExpectedResult()
+        {
             // Arrange
             var selectedAnimals = new List<Animal> { new Animal { Name = "Aap", Price = 20 } };
             var customerCard = new CustomerCard { CardType = "Gold" };
@@ -31,7 +37,8 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void ValidateAnimals_GivenInvalidValidationRule_ReturnsExpectedResult() {
+        public void ValidateAnimals_GivenInvalidValidationRule_ReturnsExpectedResult()
+        {
             // Arrange
             var selectedAnimals = new List<Animal> { new Animal { Name = "Aap", Price = 20 } };
             var customerCard = new CustomerCard { CardType = "Gold" };
@@ -48,7 +55,8 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void ValidateAnimals_MultipleValidationRulesAllValid_ReturnsValid() {
+        public void ValidateAnimals_MultipleValidationRulesAllValid_ReturnsValid()
+        {
             // Arrange
             var selectedAnimals = new List<Animal> { new Animal { Name = "Aap", Price = 20 } };
             var customerCard = new CustomerCard { CardType = "Gold" };
@@ -71,7 +79,8 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void ValidateAnimals_MultipleValidationRulesOneInvalid_ReturnsInvalid() {
+        public void ValidateAnimals_MultipleValidationRulesOneInvalid_ReturnsInvalid()
+        {
             // Arrange
             var selectedAnimals = new List<Animal> { new Animal { Name = "Aap", Price = 20 } };
             var customerCard = new CustomerCard { CardType = "Gold" };

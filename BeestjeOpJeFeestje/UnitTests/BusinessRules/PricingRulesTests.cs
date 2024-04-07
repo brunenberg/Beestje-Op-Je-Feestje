@@ -3,12 +3,17 @@ using BusinessLogic.RuleGroups;
 using BusinessLogic.Rules.PricingRules;
 using Models;
 using Moq;
+using System.Diagnostics.CodeAnalysis;
 
-namespace UnitTests {
-    public class PricingRulesTests {
+namespace UnitTests.BusinessRules
+{
+    [ExcludeFromCodeCoverage]
+    public class PricingRulesTests
+    {
         private PricingRules _rules;
 
-        public PricingRulesTests() {
+        public PricingRulesTests()
+        {
             List<IDiscountRule> discountRules = new List<IDiscountRule> {
                 new TypeGroupDiscountRule(),
                 new DuckDiscountRule(new ConcreteRandomNumberGenerator()),
@@ -20,7 +25,8 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void CalculateAnimalsPrice_GivenAnimals_ReturnsTotalPrice() {
+        public void CalculateAnimalsPrice_GivenAnimals_ReturnsTotalPrice()
+        {
             // Arrange
             var animals = new List<Animal>
             {
@@ -37,7 +43,8 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void CalculateDiscount_GivenDiscountRules_ReturnsExpectedDiscount() {
+        public void CalculateDiscount_GivenDiscountRules_ReturnsExpectedDiscount()
+        {
             // Arrange
             var selectedAnimals = new List<Animal> { new Animal { Name = "Aap", Price = 20 } };
             var customerCard = new CustomerCard { CardType = "Gold" };
@@ -58,7 +65,8 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void CalculateDiscount_NoDiscountRules_ReturnsNoDiscount() {
+        public void CalculateDiscount_NoDiscountRules_ReturnsNoDiscount()
+        {
             // Arrange
             var selectedAnimals = new List<Animal> { new Animal { Name = "Aap", Price = 20 } };
             var customerCard = new CustomerCard { CardType = "Gold" };
@@ -75,7 +83,8 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void CalculateDiscount_MultipleDiscountRules_ReturnsSumOfDiscounts() {
+        public void CalculateDiscount_MultipleDiscountRules_ReturnsSumOfDiscounts()
+        {
             // Arrange
             var selectedAnimals = new List<Animal> { new Animal { Name = "Aap", Price = 20 } };
             var customerCard = new CustomerCard { CardType = "Gold" };

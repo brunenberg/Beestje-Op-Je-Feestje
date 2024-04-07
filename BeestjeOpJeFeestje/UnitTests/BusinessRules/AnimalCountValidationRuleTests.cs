@@ -1,19 +1,26 @@
 ﻿using BusinessLogic;
 using BusinessLogic.Rules.SelectionRules;
 using Models;
+using System.Diagnostics.CodeAnalysis;
 
-namespace UnitTests {
-    public class AnimalCountValidationRuleTests {
+namespace UnitTests.BusinessRules
+{
+    [ExcludeFromCodeCoverage]
+    public class AnimalCountValidationRuleTests
+    {
         private AnimalCountValidationRule _rule;
 
-        public AnimalCountValidationRuleTests() {
+        public AnimalCountValidationRuleTests()
+        {
             _rule = new AnimalCountValidationRule();
         }
 
         [Fact]
-        public void Validate_NoAnimals_ReturnsFalse() {
+        public void Validate_NoAnimals_ReturnsFalse()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>(),
                 CustomerCard = null,
                 BookingDate = DateTime.Now
@@ -28,9 +35,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void Validate_SomeAnimals_ReturnsTrue() {
+        public void Validate_SomeAnimals_ReturnsTrue()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                 new Animal { Name = "Aap", Price = 20, ImagePath = "~/images/aap.jpg", AnimalType = new AnimalType { TypeName = "Jungle" } },

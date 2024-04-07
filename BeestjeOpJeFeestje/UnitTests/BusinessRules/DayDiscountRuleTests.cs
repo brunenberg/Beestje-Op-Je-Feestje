@@ -1,18 +1,25 @@
 ﻿using BusinessLogic.Rules.PricingRules;
 using BusinessLogic;
+using System.Diagnostics.CodeAnalysis;
 
-namespace UnitTests {
-    public class DayDiscountRuleTests {
+namespace UnitTests.BusinessRules
+{
+    [ExcludeFromCodeCoverage]
+    public class DayDiscountRuleTests
+    {
         private DayDiscountRule _rule;
 
-        public DayDiscountRuleTests() {
+        public DayDiscountRuleTests()
+        {
             _rule = new DayDiscountRule();
         }
 
         [Fact]
-        public void GetDiscount_BookingOnMonday_ReturnsDiscount() {
+        public void GetDiscount_BookingOnMonday_ReturnsDiscount()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 BookingDate = new DateTime(2024, 4, 1) // This is a Monday
             };
 
@@ -26,9 +33,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void GetDiscount_BookingOnTuesday_ReturnsDiscount() {
+        public void GetDiscount_BookingOnTuesday_ReturnsDiscount()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 BookingDate = new DateTime(2024, 4, 2) // This is a Tuesday
             };
 
@@ -42,9 +51,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void GetDiscount_BookingOnOtherDays_ReturnsNoDiscount() {
+        public void GetDiscount_BookingOnOtherDays_ReturnsNoDiscount()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 BookingDate = new DateTime(2024, 4, 3) // This is a Wednesday
             };
 

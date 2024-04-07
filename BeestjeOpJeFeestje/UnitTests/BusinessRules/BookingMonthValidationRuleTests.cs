@@ -1,19 +1,26 @@
 ﻿using BusinessLogic;
 using BusinessLogic.Rules.SelectionRules;
 using Models;
+using System.Diagnostics.CodeAnalysis;
 
-namespace UnitTests {
-    public class BookingMonthValidationRuleTests {
+namespace UnitTests.BusinessRules
+{
+    [ExcludeFromCodeCoverage]
+    public class BookingMonthValidationRuleTests
+    {
         private BookingMonthValidationRule _rule;
 
-        public BookingMonthValidationRuleTests() {
+        public BookingMonthValidationRuleTests()
+        {
             _rule = new BookingMonthValidationRule();
         }
 
         [Fact]
-        public void Validate_WoestijnInWinter_ReturnsFalse() {
+        public void Validate_WoestijnInWinter_ReturnsFalse()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Kameel", Price = 20, ImagePath = "~/images/kameel.jpg", AnimalType = new AnimalType { TypeName = "Woestijn" } }
@@ -31,9 +38,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void Validate_SneeuwInSummer_ReturnsFalse() {
+        public void Validate_SneeuwInSummer_ReturnsFalse()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Pinguïn", Price = 20, ImagePath = "~/images/pinguin.jpg", AnimalType = new AnimalType { TypeName = "Sneeuw" } }
@@ -51,9 +60,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void Validate_WoestijnInSummerAndSneeuwInWinter_ReturnsTrue() {
+        public void Validate_WoestijnInSummerAndSneeuwInWinter_ReturnsTrue()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Kameel", Price = 20, ImagePath = "~/images/kameel.jpg", AnimalType = new AnimalType { TypeName = "Woestijn" } },

@@ -1,19 +1,26 @@
 ﻿using BusinessLogic;
 using BusinessLogic.Rules.SelectionRules;
 using Models;
+using System.Diagnostics.CodeAnalysis;
 
-namespace UnitTests {
-    public class AnimalTypeValidationRuleTests {
+namespace UnitTests.BusinessRules
+{
+    [ExcludeFromCodeCoverage]
+    public class AnimalTypeValidationRuleTests
+    {
         private AnimalTypeValidationRule _rule;
 
-        public AnimalTypeValidationRuleTests() {
+        public AnimalTypeValidationRuleTests()
+        {
             _rule = new AnimalTypeValidationRule();
         }
 
         [Fact]
-        public void Validate_BoerderijdierWithLeeuwOrIJsbeer_ReturnsFalse() {
+        public void Validate_BoerderijdierWithLeeuwOrIJsbeer_ReturnsFalse()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Leeuw", Price = 20, ImagePath = "~/images/leeuw.jpg", AnimalType = new AnimalType { TypeName = "Boerderij" } },
@@ -32,9 +39,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void Validate_BoerderijdierWithoutLeeuwOrIJsbeer_ReturnsTrue() {
+        public void Validate_BoerderijdierWithoutLeeuwOrIJsbeer_ReturnsTrue()
+        {
             // Arrange
-            var context = new ValidationContext {
+            var context = new ValidationContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Koe", Price = 20, ImagePath = "~/images/koe.jpg", AnimalType = new AnimalType { TypeName = "Boerderij" } },

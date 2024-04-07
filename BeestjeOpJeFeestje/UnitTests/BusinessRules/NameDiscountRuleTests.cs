@@ -1,19 +1,26 @@
 ﻿using BusinessLogic.Rules.PricingRules;
 using BusinessLogic;
 using Models;
+using System.Diagnostics.CodeAnalysis;
 
-namespace UnitTests {
-    public class NameDiscountRuleTests {
+namespace UnitTests.BusinessRules
+{
+    [ExcludeFromCodeCoverage]
+    public class NameDiscountRuleTests
+    {
         private NameDiscountRule _rule;
 
-        public NameDiscountRuleTests() {
+        public NameDiscountRuleTests()
+        {
             _rule = new NameDiscountRule();
         }
 
         [Fact]
-        public void GetDiscount_AnimalNamesContainA_ReturnsDiscount() {
+        public void GetDiscount_AnimalNamesContainA_ReturnsDiscount()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Aap", Price = 20 },
@@ -31,9 +38,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void GetDiscount_AnimalNamesContainABCDE_ReturnsDiscount() {
+        public void GetDiscount_AnimalNamesContainABCDE_ReturnsDiscount()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Ace", Price = 20 },
@@ -55,9 +64,11 @@ namespace UnitTests {
         }
 
         [Fact]
-        public void GetDiscount_AnimalNamesNotContainA_ReturnsNoDiscount() {
+        public void GetDiscount_AnimalNamesNotContainA_ReturnsNoDiscount()
+        {
             // Arrange
-            var context = new DiscountContext {
+            var context = new DiscountContext
+            {
                 SelectedAnimals = new List<Animal>
                 {
                     new Animal { Name = "Beer", Price = 20 },

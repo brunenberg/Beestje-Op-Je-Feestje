@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Models.Migrations {
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
