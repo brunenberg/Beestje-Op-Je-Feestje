@@ -1,11 +1,9 @@
 ﻿using BeestjeOpJeFeestje.Models;
-using BusinessLogic;
 using BusinessLogic.Interfaces;
 using BusinessLogic.RuleGroups;
 using BusinessLogic.Rules.PricingRules;
 using BusinessLogic.Rules.SelectionRules;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;

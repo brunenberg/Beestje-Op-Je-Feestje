@@ -3,13 +3,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Models {
     public class ApplicationDbContext : IdentityDbContext<Account> {
-        public DbSet<Animal> Animals { get; set; }
-        public DbSet<AnimalType> AnimalTypes { get; set; }
-        public DbSet<Address> Addresses { get; set; }
-        public DbSet<Booking> Bookings { get; set; }
-        public DbSet<BookingDetail> BookingDetails { get; set; }
-        public DbSet<CustomerCard> CustomerCards { get; set; }
-        public DbSet<Guest> Guests { get; set; }
+        public virtual DbSet<Animal> Animals { get; set; }
+        public virtual DbSet<AnimalType> AnimalTypes { get; set; }
+        public virtual DbSet<Address> Addresses { get; set; }
+        public virtual DbSet<Booking> Bookings { get; set; }
+        public virtual DbSet<BookingDetail> BookingDetails { get; set; }
+        public virtual DbSet<CustomerCard> CustomerCards { get; set; }
+        public virtual DbSet<Guest> Guests { get; set; }
+
+        public ApplicationDbContext() { }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) {
