@@ -1,6 +1,6 @@
 using BeestjeOpJeFeestje.Models;
-using BusinessLogic;
 using BusinessLogic.Interfaces;
+using BusinessLogic.RuleGroups;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;

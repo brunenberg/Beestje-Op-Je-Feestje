@@ -180,11 +180,11 @@ namespace BeestjeOpJeFeestje.Controllers
             }
 
             double totalPrice = _priceRules.CalculateAnimalsPrice(animals);
-            (double, List<string>) discountInfo = _priceRules.CalculateDiscount(animals, customerCard, DateTime.Parse(HttpContext.Session.GetString("SelectedDate")));
+            (int discountPercentage, List<string> discountMessages) discountInfo = _priceRules.CalculateDiscount(animals, customerCard, DateTime.Parse(HttpContext.Session.GetString("SelectedDate")));
 
             viewModel.TotalPrice = Math.Round(totalPrice * (1 - discountInfo.Item1 / 100), 2);
-            viewModel.AppliedDiscounts = discountInfo.Item2;
-            HttpContext.Session.Set("DiscountPercentage", BitConverter.GetBytes(discountInfo.Item1));
+            viewModel.AppliedDiscounts = discountInfo.discountMessages;
+            HttpContext.Session.Set("DiscountPercentage", BitConverter.GetBytes(discountInfo.discountPercentage));
 
             return View(viewModel);
         }
