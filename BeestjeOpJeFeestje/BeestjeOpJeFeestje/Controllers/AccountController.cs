@@ -27,6 +27,10 @@ namespace BeestjeOpJeFeestje.Controllers {
             if (ModelState.IsValid) {
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded) {
+                    if (Request.Query.ContainsKey("onGoingBooking")) {
+                        return RedirectToAction("Step2", "Booking");
+                    }
+
                     return RedirectToAction("Index", "Home");
                 } else {
                     ModelState.AddModelError(string.Empty, "Ongeldige login.");
