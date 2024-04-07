@@ -143,7 +143,29 @@ namespace BeestjeOpJeFeestje.Controllers
 
         [HttpPost]
         public IActionResult Step3() {
-            if (!User.Identity.IsAuthenticated) {
+            if(!User.Identity.IsAuthenticated) {
+                Guest guest = new Guest {
+                    Name = Request.Form["Name"],
+                    Email = Request.Form["Email"],
+                    Address = new Address {
+                        Street = Request.Form["Street"],
+                        HouseNumber = Request.Form["HouseNumber"],
+                        PostalCode = Request.Form["PostalCode"],
+                        City = Request.Form["City"]
+                    }
+                };
+
+                if(!TryValidateModel(guest)) {
+                    var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                                  .Select(e => e.ErrorMessage)
+                                                  .ToArray(); // Convert to a string array
+
+                    TempData["Errors"] = errors.ToList(); // Convert to a List<string>
+
+
+                    return RedirectToAction("Step2");
+                }
+
                 HttpContext.Session.SetString("Name", Request.Form["Name"]);
                 HttpContext.Session.SetString("Email", Request.Form["Email"]);
                 HttpContext.Session.SetString("Street", Request.Form["Street"]);

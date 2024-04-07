@@ -13,7 +13,7 @@ public class Guest : ICustomValidation {
 
     public int AddressId { get; set; }
     public Address Address { get; set; }
-    public ICollection<Booking> Bookings { get; set; }
+    public ICollection<Booking>? Bookings { get; set; }
 
     public bool IsValid() {
         if(string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Email)) {
@@ -22,4 +22,5 @@ public class Guest : ICustomValidation {
 
         return true; 
     }
+
 }
