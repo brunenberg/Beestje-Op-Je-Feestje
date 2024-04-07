@@ -22,7 +22,7 @@ namespace BusinessLogic.RuleGroups
             return totalPrice;
         }
 
-        public (int discountPercentage, List<string> errorMessages) CalculateDiscount(List<Animal> selectedAnimals, CustomerCard customerCard, DateTime bookingDate)
+        public (double discountPercentage, List<string> errorMessages) CalculateDiscount(List<Animal> selectedAnimals, CustomerCard customerCard, DateTime bookingDate)
         {
             int discountPercentage = 0;
 
