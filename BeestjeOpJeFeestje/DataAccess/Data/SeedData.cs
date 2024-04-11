@@ -63,9 +63,6 @@ public static class SeedData {
             await userManager.AddToRoleAsync(customerUser, "Customer");
             await userManager.AddToRoleAsync(adminUser, "Admin");
 
-            
-
-
             // Type: Jungle - Aap, Olifant, Zebra, Leeuw
             Animal aap = new Animal { Name = "Aap", Price = 20, ImagePath = "~/images/aap.jpg", AnimalTypeId = 1 };
             Animal olifant = new Animal { Name = "Olifant", Price = 50, ImagePath = "~/images/olifant.jpg", AnimalTypeId = 1 };

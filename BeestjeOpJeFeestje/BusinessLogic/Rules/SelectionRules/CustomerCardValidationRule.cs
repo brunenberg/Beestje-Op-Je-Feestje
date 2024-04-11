@@ -25,7 +25,7 @@ namespace BusinessLogic.Rules.SelectionRules
                 }
             }
 
-            if (hasVIPAnimal && (customerCard == null || !customerCard.CardType.Equals("Platinum")))
+            if (hasVIPAnimal && (customerCard == null || !customerCard.CardType.Equals("Platina")))
             {
                 return (false, "Alleen klanten met een platina klantenkaart kunnen VIP dieren boeken.");
             }
